@@ -1,20 +1,22 @@
 package com.dateapp.dateapp.jwtToken;
 
-import com.dateapp.dateapp.userRole.UserRole;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Date;
 
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -31,29 +33,46 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("authorization");
 
-        if ("OPTIONS".equals(request.getMethod())) {
-            response.setStatus(HttpServletResponse.SC_OK);
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
-        } else {
-            if(authHeader == null || !authHeader.startsWith("Bearer ")){
-                throw new ServletException("An exception occurred");
-            }
+            return;
         }
-        UsernamePasswordAuthenticationToken authenticationByToken = getAuthenticationByToken(authHeader);
-        System.out.println(authenticationByToken);
-        SecurityContextHolder.getContext().setAuthentication(authenticationByToken);
+        try {
+            Jws<Claims> claimsJws = parseToken(authHeader);
+            System.out.println(claimsJws);
+            UsernamePasswordAuthenticationToken authenticationByToken = getAuthenticationByToken(claimsJws);
+            System.out.println(authenticationByToken);
+            SecurityContextHolder.getContext().setAuthentication(authenticationByToken);
+        }catch (JwtException e){;
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+        }
         filterChain.doFilter(request, response);
+
+
     }
 
-    private UsernamePasswordAuthenticationToken getAuthenticationByToken(String authHeader) {
+
+    private Jws<Claims> parseToken(String authHeader) {
         final String token = authHeader.substring(7);
-        Claims claims = Jwts.parser().setSigningKey("secret").parseClaimsJws(token).getBody();
-        String username = claims.get("username", String.class);
-        String userRole = claims.get("role", String.class);
+        return Jwts.parser().setSigningKey("secret").parseClaimsJws(token);
+    }
+
+    private UsernamePasswordAuthenticationToken getAuthenticationByToken(Jws<Claims> jws) {
+        String username = jws.getBody().get("username", String.class);
+        String userRole = jws.getBody().get("role", String.class);
         System.out.println(username);
         System.out.println(userRole);
-        return new UsernamePasswordAuthenticationToken(username,null,  Collections.singleton
+        return new UsernamePasswordAuthenticationToken(username, null, Collections.singleton
                 (new SimpleGrantedAuthority(userRole)));
+    }
+
+    private boolean isTokenExpired(Jws<Claims> jws) {
+        Date currentTime = new Date(System.currentTimeMillis());
+        System.out.println("current " + currentTime);
+        System.out.println("expiration " + jws.getBody().getExpiration());
+        return currentTime.after(jws.getBody().getExpiration());
+
+
     }
 }
 
