@@ -24,7 +24,7 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return "/register".equals(path) || "/login".equals(path);
+        return "/register".equals(path) || "/login".equals(path) || path.equals("/userinfo");
     }
 
     @Override
@@ -32,21 +32,18 @@ public class JwtFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("authorization");
-
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
-            return;
         }
-        try {
+        else{
             Jws<Claims> claimsJws = parseToken(authHeader);
             System.out.println(claimsJws);
             UsernamePasswordAuthenticationToken authenticationByToken = getAuthenticationByToken(claimsJws);
             System.out.println(authenticationByToken);
             SecurityContextHolder.getContext().setAuthentication(authenticationByToken);
-        }catch (JwtException e){;
-            response.setStatus(HttpStatus.FORBIDDEN.value());
+            filterChain.doFilter(request, response);
         }
-        filterChain.doFilter(request, response);
+
 
 
     }
@@ -66,13 +63,5 @@ public class JwtFilter extends OncePerRequestFilter {
                 (new SimpleGrantedAuthority(userRole)));
     }
 
-    private boolean isTokenExpired(Jws<Claims> jws) {
-        Date currentTime = new Date(System.currentTimeMillis());
-        System.out.println("current " + currentTime);
-        System.out.println("expiration " + jws.getBody().getExpiration());
-        return currentTime.after(jws.getBody().getExpiration());
-
-
-    }
 }
 

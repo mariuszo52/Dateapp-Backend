@@ -26,18 +26,20 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
-
         security.csrf(AbstractHttpConfigurer::disable);
         security.headers(configurer -> configurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
         security.formLogin(AbstractHttpConfigurer::disable);
         security.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
         security.sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return security.authorizeHttpRequests(request -> request
+                        .requestMatchers("/test/**").hasRole("USER")
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/userinfo/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/auth").hasRole("USER")
                         .requestMatchers("/register").permitAll()
                         .requestMatchers("/login").permitAll())
                 .build();
+
     }
 
     @Bean

@@ -2,15 +2,21 @@ package com.dateapp.dateapp.login;
 
 
 import com.dateapp.dateapp.jwtToken.JwtTokenService;
+import com.dateapp.dateapp.user.User;
 import com.dateapp.dateapp.user.UserRegisterDto;
 import com.dateapp.dateapp.user.UserService;
+import com.dateapp.dateapp.userInfo.UserInfoDto;
+import com.dateapp.dateapp.userInfo.UserInfoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @CrossOrigin
 @RestController
@@ -18,15 +24,28 @@ public class LoginController {
     private final UserService userService;
     private final JwtTokenService jwtTokenService;
     private final DaoAuthenticationProvider daoAuthenticationProvider;
+    private final UserInfoService userInfoService;
 
-    public LoginController(UserService userService, JwtTokenService jwtTokenService, DaoAuthenticationProvider daoAuthenticationProvider) {
+    public LoginController(UserService userService, JwtTokenService jwtTokenService, DaoAuthenticationProvider daoAuthenticationProvider, UserInfoService userInfoService) {
         this.userService = userService;
         this.jwtTokenService = jwtTokenService;
         this.daoAuthenticationProvider = daoAuthenticationProvider;
+        this.userInfoService = userInfoService;
     }
-    @GetMapping("/auth")
-    String auuth(){
-        return "działa";
+    @GetMapping("test")
+    List<User> test(){
+        return StreamSupport.stream(userService.getAllUsers().spliterator(), false).collect(Collectors.toList());
+
+    }
+    @PostMapping("/userinfo")
+    ResponseEntity<String> addUserInfo(@RequestBody UserInfoDto userInfoDto){
+        try{
+            System.out.println(userInfoDto);
+            userInfoService.addUserInfo(userInfoDto);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
     @PostMapping("/login")
     ResponseEntity<String> login(@RequestBody UserRegisterDto userRegisterDto) {
@@ -43,11 +62,11 @@ public class LoginController {
 
     @PostMapping("/register")
     ResponseEntity<String> register(@RequestBody UserRegisterDto userRegisterDto) {
-        if (userRegisterDto.getPassword().equals(userRegisterDto.getConfirmPassword())) {
-            userService.registerUser(userRegisterDto);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords do not match.");
+        try{
+            Long id = userService.registerUser(userRegisterDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(id.toString());
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }

@@ -6,7 +6,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class UserService {
@@ -24,18 +26,30 @@ public class UserService {
         return userRepository.findUserByEmailAndPassword(email, password)
                 .map(UserMapper::map);
     }
+    public Iterable<User> getAllUsers(){
+        return userRepository.findAll();
+    }
     @Transactional
-    public void registerUser(UserRegisterDto userRegisterDto){
-        UserRole userRole = new UserRole();
-        userRole.setId(1L);
-        userRole.setName("USER");
-        userRegisterDto.setUserRole(userRole.getName());
-
-        userRoleRepository.save(userRole);
-        String encodedPass = passwordEncoder.encode(userRegisterDto.getPassword());
-        User user = userMapper.map(userRegisterDto);
-        user.setPassword(encodedPass);
-
-        userRepository.save(user);
+    public Long registerUser(UserRegisterDto userRegisterDto) {
+        List<String> allUsers = StreamSupport.stream(userRepository.findAll().spliterator(), false)
+                .map(User::getEmail)
+                .toList();
+        if (allUsers.contains(userRegisterDto.getEmail())) {
+            throw new RuntimeException("This email address is already taken");
+        }
+        else if (!userRegisterDto.getPassword().equals(userRegisterDto.getConfirmPassword())){
+           throw new RuntimeException("Passwords do not match.");
+        }else {
+            UserRole userRole = new UserRole();
+            userRole.setId(1L);
+            userRole.setName("USER");
+            userRegisterDto.setUserRole(userRole.getName());
+            userRoleRepository.save(userRole);
+            String encodedPass = passwordEncoder.encode(userRegisterDto.getPassword());
+            User user = userMapper.map(userRegisterDto);
+            user.setPassword(encodedPass);
+            User savedUser = userRepository.save(user);
+            return savedUser.getId();
+        }
     }
 }

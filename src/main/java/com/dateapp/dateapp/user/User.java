@@ -1,5 +1,6 @@
 package com.dateapp.dateapp.user;
 
+import com.dateapp.dateapp.userInfo.UserInfo;
 import com.dateapp.dateapp.userRole.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -18,8 +19,18 @@ public class User {
     @Size(min = 5)
     private String password;
     @ManyToOne
+    @JoinColumn(name = "user_role_id")
     private UserRole userRole;
+    @OneToOne
+    @JoinColumn(name = "user_info_id")
+    private UserInfo userInfo;
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
 
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
     public UserRole getUserRole() {
         return userRole;
     }
