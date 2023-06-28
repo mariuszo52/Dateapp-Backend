@@ -22,7 +22,7 @@ public class JwtTokenService {
                 .setClaims(claims)
                 .signWith(SignatureAlgorithm.HS512, "secret")
                 .setIssuedAt(new Date(now))
-                .setExpiration(new Date(now + 30 * 60 * 1000))
+                .setExpiration(new Date(now + 60 * 60 * 1000))
                 .compact();
 
     }

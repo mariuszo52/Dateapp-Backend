@@ -24,7 +24,7 @@
             <column name="gender_interest" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="url" type="VARCHAR(500)">
+            <column name="url" type="VARCHAR(1000)">
                 <constraints nullable="false"/>
             </column>
             <column name="about" type="VARCHAR(1000)">

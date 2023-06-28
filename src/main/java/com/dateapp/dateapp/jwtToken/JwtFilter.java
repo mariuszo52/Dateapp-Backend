@@ -8,6 +8,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,7 +25,7 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return "/register".equals(path) || "/login".equals(path) || path.equals("/userinfo");
+        return "/register".equals(path) || "/login".equals(path) || path.equals("/userinfo") || path.contains("/h2-console");
     }
 
     @Override
@@ -32,14 +33,16 @@ public class JwtFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        boolean isOptionsMethod = request.getMethod().equals(HttpMethod.OPTIONS.name());
+        if(isOptionsMethod){
             filterChain.doFilter(request, response);
+        }
+        else if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            response.setStatus(HttpStatus.FORBIDDEN.value());
         }
         else{
             Jws<Claims> claimsJws = parseToken(authHeader);
-            System.out.println(claimsJws);
             UsernamePasswordAuthenticationToken authenticationByToken = getAuthenticationByToken(claimsJws);
-            System.out.println(authenticationByToken);
             SecurityContextHolder.getContext().setAuthentication(authenticationByToken);
             filterChain.doFilter(request, response);
         }

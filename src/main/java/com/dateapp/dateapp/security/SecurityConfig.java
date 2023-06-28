@@ -31,13 +31,14 @@ public class SecurityConfig {
         security.formLogin(AbstractHttpConfigurer::disable);
         security.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
         security.sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
         return security.authorizeHttpRequests(request -> request
-                        .requestMatchers("/test/**").hasRole("USER")
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/userinfo/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/userinfo/**").permitAll()
                         .requestMatchers("/register").permitAll()
-                        .requestMatchers("/login").permitAll())
+                        .requestMatchers("/login").permitAll()
+                        .anyRequest().hasRole("USER"))
+
                 .build();
 
     }

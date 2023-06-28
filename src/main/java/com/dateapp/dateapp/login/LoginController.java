@@ -12,14 +12,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@CrossOrigin
 @RestController
+@CrossOrigin
 public class LoginController {
     private final UserService userService;
     private final JwtTokenService jwtTokenService;
@@ -37,6 +40,11 @@ public class LoginController {
         return StreamSupport.stream(userService.getAllUsers().spliterator(), false).collect(Collectors.toList());
 
     }
+    @GetMapping("/userinfo")
+    ResponseEntity<UserInfoDto> getUserInfo(@RequestParam Long userId){
+        UserInfoDto userInfoDto = userInfoService.getUserInfoByUserId(userId).orElseThrow();
+        return ResponseEntity.ok().body(userInfoDto);
+    }
     @PostMapping("/userinfo")
     ResponseEntity<String> addUserInfo(@RequestBody UserInfoDto userInfoDto){
         try{
@@ -48,14 +56,19 @@ public class LoginController {
         }
     }
     @PostMapping("/login")
-    ResponseEntity<String> login(@RequestBody UserRegisterDto userRegisterDto) {
+    ResponseEntity<Map<String, String>> login(@RequestBody UserRegisterDto userRegisterDto) {
         try {
+            System.out.println(userRegisterDto);
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userRegisterDto.getEmail(), userRegisterDto.getPassword());
+            String username = authentication.getName();
+            long id = userService.findUserByEmail(username).orElseThrow().getId();
             daoAuthenticationProvider.authenticate(authentication);
             String jwtToken = jwtTokenService.generateJwtToken(userRegisterDto);
-            return ResponseEntity.ok(jwtToken);
+            Map<String, String> map = Map.of("userId", String.valueOf(id),"jwt", jwtToken);
+            return ResponseEntity.ok(map);
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(null, e.getMessage()));
         }
     }
 

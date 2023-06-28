@@ -1,11 +1,14 @@
 package com.dateapp.dateapp.user;
 
+import com.dateapp.dateapp.leftSwiped.LeftSwipedProfile;
 import com.dateapp.dateapp.userInfo.UserInfo;
 import com.dateapp.dateapp.userRole.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -24,6 +27,17 @@ public class User {
     @OneToOne
     @JoinColumn(name = "user_info_id")
     private UserInfo userInfo;
+    @OneToMany(mappedBy = "user" )
+    private List<LeftSwipedProfile> leftSwipedProfile;
+
+    public List<LeftSwipedProfile> getLeftSwipedProfile() {
+        return leftSwipedProfile;
+    }
+
+    public void setLeftSwipedProfile(List<LeftSwipedProfile> leftSwipedProfile) {
+        this.leftSwipedProfile = leftSwipedProfile;
+    }
+
     public UserInfo getUserInfo() {
         return userInfo;
     }

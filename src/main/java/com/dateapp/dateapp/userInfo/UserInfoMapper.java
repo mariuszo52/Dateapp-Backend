@@ -17,4 +17,20 @@ class UserInfoMapper {
         userInfo.setUserId(userInfoDto.getUserId());
         return userInfo;
     }
+
+    static UserInfoDto map(UserInfo userInfo){
+        UserInfoDto userInfoDto = new UserInfoDto();
+        userInfoDto.setId(userInfo.getId());
+        userInfoDto.setFirstName(userInfo.getFirstName());
+        userInfoDto.setDayOfBirth(userInfo.getDateOfBirth().getDayOfMonth());
+        userInfoDto.setMonthOfBirth(userInfo.getDateOfBirth().getMonthValue());
+        userInfoDto.setYearOfBirth(userInfo.getDateOfBirth().getYear());
+        userInfoDto.setShowGender(userInfo.getShowGender());
+        userInfoDto.setGenderIdentity(userInfo.getGenderIdentity());
+        userInfoDto.setGenderInterest(userInfo.getGenderInterest());
+        userInfoDto.setUrl(userInfo.getUrl());
+        userInfoDto.setAbout(userInfo.getAbout());
+        userInfoDto.setUserId(userInfo.getUserId());
+        return userInfoDto;
+    }
 }

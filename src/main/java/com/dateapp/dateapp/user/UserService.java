@@ -26,6 +26,9 @@ public class UserService {
         return userRepository.findUserByEmailAndPassword(email, password)
                 .map(UserMapper::map);
     }
+    public Optional<User> findUserByEmail(String email){
+       return userRepository.findByEmail(email);
+    }
     public Iterable<User> getAllUsers(){
         return userRepository.findAll();
     }
@@ -40,11 +43,8 @@ public class UserService {
         else if (!userRegisterDto.getPassword().equals(userRegisterDto.getConfirmPassword())){
            throw new RuntimeException("Passwords do not match.");
         }else {
-            UserRole userRole = new UserRole();
-            userRole.setId(1L);
-            userRole.setName("USER");
+            UserRole userRole = userRoleRepository.findByName("USER").orElseThrow(RuntimeException::new);
             userRegisterDto.setUserRole(userRole.getName());
-            userRoleRepository.save(userRole);
             String encodedPass = passwordEncoder.encode(userRegisterDto.getPassword());
             User user = userMapper.map(userRegisterDto);
             user.setPassword(encodedPass);
