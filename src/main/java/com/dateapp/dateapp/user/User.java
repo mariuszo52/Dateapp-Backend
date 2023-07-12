@@ -1,6 +1,7 @@
 package com.dateapp.dateapp.user;
 
-import com.dateapp.dateapp.leftSwiped.LeftSwipedProfile;
+import com.dateapp.dateapp.match.Match;
+import com.dateapp.dateapp.swipedProfile.SwipedProfile;
 import com.dateapp.dateapp.userInfo.UserInfo;
 import com.dateapp.dateapp.userRole.UserRole;
 import jakarta.persistence.*;
@@ -15,7 +16,6 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     private Long id;
     @Email
     private String email;
@@ -28,14 +28,20 @@ public class User {
     @JoinColumn(name = "user_info_id")
     private UserInfo userInfo;
     @OneToMany(mappedBy = "user" )
-    private List<LeftSwipedProfile> leftSwipedProfile;
+    private List<SwipedProfile> swipedProfiles;
+    @OneToMany(mappedBy = "user")
+    private List<Match> matches;
 
-    public List<LeftSwipedProfile> getLeftSwipedProfile() {
-        return leftSwipedProfile;
+    public List<Match> getMatches() {
+        return matches;
     }
 
-    public void setLeftSwipedProfile(List<LeftSwipedProfile> leftSwipedProfile) {
-        this.leftSwipedProfile = leftSwipedProfile;
+    public List<SwipedProfile> getSwipedProfiles() {
+        return swipedProfiles;
+    }
+
+    public void setSwipedProfiles(List<SwipedProfile> swipedProfiles) {
+        this.swipedProfiles = swipedProfiles;
     }
 
     public UserInfo getUserInfo() {

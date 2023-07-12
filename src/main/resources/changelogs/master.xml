@@ -7,8 +7,7 @@
     <include file="0001_create_table_user_role.xml" relativeToChangelogFile="true"/>
     <include file="0002_create_table_user_info.xml" relativeToChangelogFile="true"/>
     <include file="0003_create_table_users.xml" relativeToChangelogFile="true"/>
-    <include file="0004_create_table_like.xml" relativeToChangelogFile="true"/>
-    <include file="0005_create_table_left_swipe.xml" relativeToChangelogFile="true"/>
-
+    <include file="0004_create_table_swiped_profile.xml" relativeToChangelogFile="true"/>
+    <include file="0005_create_table_match.xml" relativeToChangelogFile="true"/>
     <include file="changelogs/data/data.sql"/>
 </databaseChangeLog>

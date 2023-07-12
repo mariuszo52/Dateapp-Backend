@@ -5,19 +5,22 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
     <changeSet id="0004" author="Mariusz">
-        <createTable tableName="likes">
+        <createTable tableName="swiped_profile">
             <column type="BIGINT" name="id" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="time" type="DateTime">
+            <column type="DATETIME" name="swipe_time">
                 <constraints nullable="false"/>
             </column>
-            <column name="sending_user_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_sending_user"
+            <column type="VARCHAR(100)" name="swipe_direction">
+                <constraints nullable="true"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_user2_id"
                              referencedTableName="users" referencedColumnNames="id"/>
             </column>
-            <column name="receiving_user_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_receiving_user"
+            <column name="swiped_profile_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_left_swiped"
                              referencedTableName="users" referencedColumnNames="id"/>
             </column>
         </createTable>

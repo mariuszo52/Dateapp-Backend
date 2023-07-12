@@ -22,15 +22,9 @@ public class UserService {
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
     }
-    public Optional<UserRegisterDto> findUserByCredentials(String email, String password){
-        return userRepository.findUserByEmailAndPassword(email, password)
-                .map(UserMapper::map);
-    }
+
     public Optional<User> findUserByEmail(String email){
        return userRepository.findByEmail(email);
-    }
-    public Iterable<User> getAllUsers(){
-        return userRepository.findAll();
     }
     @Transactional
     public Long registerUser(UserRegisterDto userRegisterDto) {

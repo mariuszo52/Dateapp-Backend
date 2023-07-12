@@ -35,11 +35,6 @@ public class LoginController {
         this.daoAuthenticationProvider = daoAuthenticationProvider;
         this.userInfoService = userInfoService;
     }
-    @GetMapping("test")
-    List<User> test(){
-        return StreamSupport.stream(userService.getAllUsers().spliterator(), false).collect(Collectors.toList());
-
-    }
     @GetMapping("/userinfo")
     ResponseEntity<UserInfoDto> getUserInfo(@RequestParam Long userId){
         UserInfoDto userInfoDto = userInfoService.getUserInfoByUserId(userId).orElseThrow();
@@ -56,7 +51,7 @@ public class LoginController {
         }
     }
     @PostMapping("/login")
-    ResponseEntity<Map<String, String>> login(@RequestBody UserRegisterDto userRegisterDto) {
+    ResponseEntity<?> login(@RequestBody UserRegisterDto userRegisterDto) {
         try {
             System.out.println(userRegisterDto);
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userRegisterDto.getEmail(), userRegisterDto.getPassword());
@@ -68,7 +63,7 @@ public class LoginController {
             return ResponseEntity.ok(map);
         } catch (AuthenticationException e) {
             System.out.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(null, e.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 

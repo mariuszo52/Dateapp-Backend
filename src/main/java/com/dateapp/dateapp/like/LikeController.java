@@ -1,5 +1,7 @@
 package com.dateapp.dateapp.like;
 
+import com.dateapp.dateapp.swipedProfile.SwipedProfileDto;
+import com.dateapp.dateapp.userInfo.UserInfoDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,9 +23,10 @@ public class LikeController {
         this.likeService = likeService;
     }
    @GetMapping("/likes-received")
-    ResponseEntity<List<ReceivedLikeDto>> getAllUserReceivedLikes(@RequestParam long userId){
+    ResponseEntity<List<UserInfoDto>> getAllUserReceivedLikes(@RequestParam long userId){
         try {
-            List<ReceivedLikeDto> allUserReceivedLikes = likeService.getAllUserReceivedLikes(userId);
+            List<UserInfoDto> allUserReceivedLikes = likeService.getAllUserReceivedLikes(userId);
+            System.out.println("otrzymane lajki " + allUserReceivedLikes);
             return ResponseEntity.ok(allUserReceivedLikes);
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

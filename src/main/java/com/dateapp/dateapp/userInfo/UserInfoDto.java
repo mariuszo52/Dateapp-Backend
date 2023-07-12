@@ -1,8 +1,12 @@
 package com.dateapp.dateapp.userInfo;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 public class UserInfoDto {
     private long id;
     private String firstName;
+    private int age;
     private int dayOfBirth;
     private int monthOfBirth;
     private int yearOfBirth;
@@ -12,6 +16,14 @@ public class UserInfoDto {
     private String url;
     private String about;
     private long userId;
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge() {
+        this.age = (int) ChronoUnit.YEARS.between(LocalDate.of(yearOfBirth, monthOfBirth, dayOfBirth), LocalDate.now());
+    }
 
     @Override
     public String toString() {

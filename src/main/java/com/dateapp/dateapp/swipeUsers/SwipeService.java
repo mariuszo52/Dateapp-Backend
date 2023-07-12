@@ -1,10 +1,9 @@
 package com.dateapp.dateapp.swipeUsers;
 
 import com.dateapp.dateapp.exceptions.UserNotFoundException;
-import com.dateapp.dateapp.leftSwiped.LeftSwipedProfile;
+import com.dateapp.dateapp.match.Match;
+import com.dateapp.dateapp.swipedProfile.SwipedProfile;
 import com.dateapp.dateapp.user.User;
-import com.dateapp.dateapp.user.UserMapper;
-import com.dateapp.dateapp.user.UserRegisterDto;
 import com.dateapp.dateapp.user.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +21,16 @@ class SwipeService {
 
     Set<SwipeCardDto> getUsersToSwipe(long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        List<User> usersLeftSwiped = user.getLeftSwipedProfile().stream()
-                .map(LeftSwipedProfile::getLeftSwipedProfile)
+        List<Long> matchedUsers = user.getMatches().stream()
+                .map(match -> match.getMatchedUser().getId())
                 .toList();
-        System.out.println("left swipped " + usersLeftSwiped.size());
+        List<User> usersSwiped = user.getSwipedProfiles().stream()
+                .map(SwipedProfile::getSwipedProfile)
+                .toList();
+
         return userRepository.findAllByUserInfo_GenderIdentity(user.getUserInfo().getGenderInterest()).stream()
-                .filter(user1 -> !usersLeftSwiped.contains(user1))
+                .filter(user1 -> !matchedUsers.contains(user1.getId()))
+                .filter(user1 -> !usersSwiped.contains(user1))
                 .map(SwipeCardMapper::map)
                 .collect(Collectors.toSet());
     }

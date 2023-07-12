@@ -1,30 +1,30 @@
 package com.dateapp.dateapp.like;
 
+import com.dateapp.dateapp.exceptions.UserNotFoundException;
+import com.dateapp.dateapp.swipedProfile.*;
+import com.dateapp.dateapp.user.User;
+import com.dateapp.dateapp.user.UserMapper;
+import com.dateapp.dateapp.user.UserRepository;
+import com.dateapp.dateapp.userInfo.UserInfoDto;
+import com.dateapp.dateapp.userInfo.UserInfoMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 @Service
 class LikeService {
-    private final LikeRepository likeRepository;
+    private final UserRepository userRepository;
+    private final SwipedProfileRepository swipedProfileRepository;
 
-    LikeService(LikeRepository likeRepository) {
-        this.likeRepository = likeRepository;
+    LikeService(UserRepository userRepository, SwipedProfileRepository swipedProfileRepository) {
+        this.userRepository = userRepository;
+        this.swipedProfileRepository = swipedProfileRepository;
     }
-    List<ReceivedLikeDto> getAllUserReceivedLikes(long userId) {
-        return likeRepository.findAllByReceivingUser_Id(userId).stream()
-                .map(LikeMapper::map)
-                .sorted((o1, o2) -> {
-                    if (o1.getTime().isBefore(o2.getTime())) {
-                        return 1;
-                    }
-                    if (o2.getTime().isBefore(o1.getTime())) {
-                        return -1;
-                    }
-                    return 0;
-                }).toList();
+
+    List<UserInfoDto> getAllUserReceivedLikes(long userId) {
+        return swipedProfileRepository.findAllBySwipedProfile_IdAndSwipeDirection(userId, SwipedProfileService.RIGHT_SWIPE).stream()
+                .map(p -> p.getUser().getUserInfo())
+                .map(UserInfoMapper::map)
+                .toList();
     }
 }

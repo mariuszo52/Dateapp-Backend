@@ -2,7 +2,7 @@ package com.dateapp.dateapp.userInfo;
 
 import java.time.LocalDate;
 
-class UserInfoMapper {
+public class UserInfoMapper {
     static UserInfo map(UserInfoDto userInfoDto) {
         UserInfo userInfo = new UserInfo();
         LocalDate dateOfBirth = LocalDate.of(userInfoDto.getYearOfBirth(),
@@ -18,7 +18,7 @@ class UserInfoMapper {
         return userInfo;
     }
 
-    static UserInfoDto map(UserInfo userInfo){
+    public static UserInfoDto map(UserInfo userInfo){
         UserInfoDto userInfoDto = new UserInfoDto();
         userInfoDto.setId(userInfo.getId());
         userInfoDto.setFirstName(userInfo.getFirstName());
@@ -31,6 +31,7 @@ class UserInfoMapper {
         userInfoDto.setUrl(userInfo.getUrl());
         userInfoDto.setAbout(userInfo.getAbout());
         userInfoDto.setUserId(userInfo.getUserId());
+        userInfoDto.setAge();
         return userInfoDto;
     }
 }
