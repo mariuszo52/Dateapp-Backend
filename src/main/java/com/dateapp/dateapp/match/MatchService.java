@@ -12,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.dateapp.dateapp.swipedProfile.SwipedProfileService.LEFT_SWIPE;
-import static com.dateapp.dateapp.swipedProfile.SwipedProfileService.RIGHT_SWIPE;
 
 @Service
 public class MatchService {

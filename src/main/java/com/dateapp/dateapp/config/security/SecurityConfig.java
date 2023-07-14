@@ -1,4 +1,4 @@
-package com.dateapp.dateapp.security;
+package com.dateapp.dateapp.config.security;
 
 
 import com.dateapp.dateapp.jwtToken.JwtFilter;
