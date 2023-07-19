@@ -9,12 +9,15 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class SecurityConfig {
@@ -27,23 +30,20 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
         security.csrf(AbstractHttpConfigurer::disable);
-        security.headers(configurer -> configurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
+        security.headers(configurer -> configurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
         security.formLogin(AbstractHttpConfigurer::disable);
         security.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
         security.sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
         return security.authorizeHttpRequests(request -> request
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/chat/**").permitAll()
                         .requestMatchers("/userinfo/**").permitAll()
-                        .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/register").permitAll()
                         .requestMatchers("/login").permitAll()
                         .anyRequest().hasRole("USER"))
-
                 .build();
 
     }
-
     @Bean
     PasswordEncoder bcryptEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();

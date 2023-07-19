@@ -25,8 +25,8 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return "/register".equals(path) || "/login".equals(path) || path.equals("/userinfo")
-                || path.contains("/h2-console");
+        System.out.println(path);
+        return "/register".equals(path) || "/login".equals(path) || path.equals("/userinfo") || path.contains("chat");
     }
 
     @Override
@@ -61,8 +61,6 @@ public class JwtFilter extends OncePerRequestFilter {
     private UsernamePasswordAuthenticationToken getAuthenticationByToken(Jws<Claims> jws) {
         String username = jws.getBody().get("username", String.class);
         String userRole = jws.getBody().get("role", String.class);
-        System.out.println(username);
-        System.out.println(userRole);
         return new UsernamePasswordAuthenticationToken(username, null, Collections.singleton
                 (new SimpleGrantedAuthority(userRole)));
     }

@@ -26,6 +26,7 @@ class MatchController {
         this.userService = userService;
     }
 
+
     @GetMapping("/all-matches")
     ResponseEntity<?> getAllUserMatches(@RequestParam long userId) {
         try {

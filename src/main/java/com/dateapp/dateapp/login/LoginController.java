@@ -2,7 +2,6 @@ package com.dateapp.dateapp.login;
 
 
 import com.dateapp.dateapp.jwtToken.JwtTokenService;
-import com.dateapp.dateapp.user.User;
 import com.dateapp.dateapp.user.UserRegisterDto;
 import com.dateapp.dateapp.user.UserService;
 import com.dateapp.dateapp.userInfo.UserInfoDto;
@@ -12,14 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @RestController
 @CrossOrigin
@@ -53,7 +47,7 @@ public class LoginController {
     @PostMapping("/login")
     ResponseEntity<?> login(@RequestBody UserRegisterDto userRegisterDto) {
         try {
-            System.out.println(userRegisterDto);
+            System.out.println("Login: " + userRegisterDto);
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userRegisterDto.getEmail(), userRegisterDto.getPassword());
             String username = authentication.getName();
             long id = userService.findUserByEmail(username).orElseThrow().getId();
