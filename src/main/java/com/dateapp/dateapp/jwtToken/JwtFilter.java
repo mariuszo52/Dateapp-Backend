@@ -2,7 +2,6 @@ package com.dateapp.dateapp.jwtToken;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -17,7 +16,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Date;
 
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -26,7 +24,8 @@ public class JwtFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
         System.out.println(path);
-        return "/register".equals(path) || "/login".equals(path) || path.equals("/userinfo") || path.contains("chat");
+        return "/register".equals(path) || "/login".equals(path) || path.equals("/userinfo") || path.contains("chat")
+                || path.contains("h2-console");
     }
 
     @Override

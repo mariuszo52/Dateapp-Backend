@@ -35,13 +35,17 @@ public class SecurityConfig {
         security.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
         security.sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return security.authorizeHttpRequests(request -> request
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .anyRequest().permitAll())
+                .build();
+        /*
+        requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/chat/**").permitAll()
                         .requestMatchers("/userinfo/**").permitAll()
                         .requestMatchers("/register").permitAll()
                         .requestMatchers("/login").permitAll()
                         .anyRequest().hasRole("USER"))
-                .build();
+         */
 
     }
     @Bean

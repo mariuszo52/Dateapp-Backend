@@ -9,11 +9,18 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+    private final UserHandshakeHandler userHandshakeHandler;
+
+    public WebSocketConfig(UserHandshakeHandler userHandshakeHandler) {
+        this.userHandshakeHandler = userHandshakeHandler;
+    }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/chat").setAllowedOrigins("http://localhost:3000");
-        registry.addEndpoint("/chat").setAllowedOrigins("http://localhost:3000").withSockJS();
+        registry.addEndpoint("/chat")
+                .setHandshakeHandler(userHandshakeHandler)
+                .setAllowedOrigins("http://localhost:3000")
+                .withSockJS();
     }
 
     @Override

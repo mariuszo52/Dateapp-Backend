@@ -1,5 +1,6 @@
 package com.dateapp.dateapp.user;
 
+import com.dateapp.dateapp.chat.Chat;
 import com.dateapp.dateapp.match.Match;
 import com.dateapp.dateapp.swipedProfile.SwipedProfile;
 import com.dateapp.dateapp.userInfo.UserInfo;
@@ -9,7 +10,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -31,6 +34,20 @@ public class User {
     private List<SwipedProfile> swipedProfiles;
     @OneToMany(mappedBy = "user")
     private List<Match> matches;
+    @ManyToMany(mappedBy = "participants")
+    private Set<Chat> chats = new HashSet<>();
+
+    public void setMatches(List<Match> matches) {
+        this.matches = matches;
+    }
+
+    public Set<Chat> getChats() {
+        return chats;
+    }
+
+    public void setChats(Set<Chat> chats) {
+        this.chats = chats;
+    }
 
     public List<Match> getMatches() {
         return matches;

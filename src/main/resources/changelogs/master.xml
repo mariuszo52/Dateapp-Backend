@@ -9,5 +9,8 @@
     <include file="0003_create_table_users.xml" relativeToChangelogFile="true"/>
     <include file="0004_create_table_swiped_profile.xml" relativeToChangelogFile="true"/>
     <include file="0005_create_table_match.xml" relativeToChangelogFile="true"/>
+    <include file="0006_create_table_chat.xml" relativeToChangelogFile="true"/>
+    <include file="0007_create_table_message.xml" relativeToChangelogFile="true"/>
+    <include file="0008_create_table_chat_users.xml" relativeToChangelogFile="true"/>
     <include file="changelogs/data/data.sql"/>
 </databaseChangeLog>

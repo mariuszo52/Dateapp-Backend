@@ -1,5 +1,7 @@
 package com.dateapp.dateapp.swipedProfile;
 
+import com.dateapp.dateapp.chat.Chat;
+import com.dateapp.dateapp.chat.ChatService;
 import com.dateapp.dateapp.match.MatchDto;
 import com.dateapp.dateapp.match.MatchService;
 import org.springframework.http.HttpStatus;
@@ -14,10 +16,12 @@ import static com.dateapp.dateapp.swipedProfile.SwipedProfileService.RIGHT_SWIPE
 class SwipedProfileController {
     private final SwipedProfileService swipedProfileService;
     private final MatchService matchService;
+    private final ChatService chatService;
 
-    SwipedProfileController(SwipedProfileService swipedProfileService, MatchService matchService) {
+    SwipedProfileController(SwipedProfileService swipedProfileService, MatchService matchService, ChatService chatService) {
         this.swipedProfileService = swipedProfileService;
         this.matchService = matchService;
+        this.chatService = chatService;
     }
 
     @PostMapping("/swipe-left")
@@ -47,6 +51,8 @@ class SwipedProfileController {
             else if(matchService.checkMatch(rightSwipedProfile, RIGHT_SWIPE)) {
                 MatchDto matchDto = createMatchDto(rightSwipedProfile, true);
                 matchService.saveMatch(matchDto);
+                chatService.createChat(matchDto);
+
                 swipedProfileService.deleteMatchedLikes(rightSwipedProfile.getUserId(), rightSwipedProfile.getSwipedProfileId());
             }
             else {

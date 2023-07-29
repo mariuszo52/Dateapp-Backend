@@ -1,20 +1,24 @@
 package com.dateapp.dateapp.message;
 
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+@CrossOrigin
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 public class MessageController {
+    private final MessageService messageService;
 
-    @MessageMapping("/chat")
-    @SendTo("/topic/messages")
-    public Message send(Message message) {
-        return new Message(message.getFrom(), message.getText());
+    public MessageController(MessageService messageService) {
+        this.messageService = messageService;
     }
 
+    @GetMapping("/get-chat-messages")
+    public ResponseEntity<Set<MessageDto>> getChatMessages(@RequestParam Long chatId){
+        Set<MessageDto> chatMessages = messageService.getChatMessages(chatId);
+        return ResponseEntity.ok().body(chatMessages);
+
+
+    }
 
 }
