@@ -1,9 +1,11 @@
 package com.dateapp.dateapp.chat;
 
+import com.dateapp.dateapp.match.Match;
 import com.dateapp.dateapp.message.Message;
 import com.dateapp.dateapp.user.User;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +22,16 @@ public class Chat {
     private Set<User> participants = new HashSet<>();
     @OneToMany(mappedBy = "chat")
     private Set<Message> messages = new HashSet<>();
+    @OneToOne
+    private Match match;
+
+    public Match getMatch() {
+        return match;
+    }
+
+    public void setMatch(Match match) {
+        this.match = match;
+    }
 
     public Chat() {
     }

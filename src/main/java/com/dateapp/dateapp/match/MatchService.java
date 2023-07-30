@@ -1,5 +1,7 @@
 package com.dateapp.dateapp.match;
 
+import com.dateapp.dateapp.chat.Chat;
+import com.dateapp.dateapp.chat.ChatDto;
 import com.dateapp.dateapp.exceptions.UserNotFoundException;
 import com.dateapp.dateapp.swipedProfile.SwipedProfileDto;
 import com.dateapp.dateapp.user.User;
@@ -24,9 +26,14 @@ public class MatchService {
         this.matchRepository = matchRepository;
         this.userRepository = userRepository;
     }
+    public MatchDto getMatchById(long id){
+        return matchRepository.findById(id)
+                .map(matchMapper::map).orElseThrow();
+
+    }
 
     @Transactional
-    public void saveMatch(MatchDto matchDto) {
+    public Match saveMatch(MatchDto matchDto) {
         Match match = matchMapper.map(matchDto);
         MatchDto matchDto1 = new MatchDto();
         matchDto1.setUserId(matchDto.getMatchedUserId());
@@ -35,8 +42,8 @@ public class MatchService {
         Match match1 = matchMapper.map(matchDto1);
         matchRepository.save(match);
         matchRepository.save(match1);
+        return match;
     }
-
 
     public boolean checkMatch(SwipedProfileDto rightSwipedProfile, String swipeDirection) {
         User user2 = userRepository.findById(rightSwipedProfile.getSwipedProfileId()).orElseThrow(UserNotFoundException::new);

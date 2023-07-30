@@ -12,6 +12,7 @@
             <column name="is_matched" type="BOOLEAN" defaultOnNull="true">
                 <constraints nullable="true"/>
             </column>
+            <column name="match_date" type="DATE"/>
             <column name="user_id" type="BIGINT">
                 <constraints foreignKeyName="fk_user3" referencedTableName="users" referencedColumnNames="id"/>
             </column>

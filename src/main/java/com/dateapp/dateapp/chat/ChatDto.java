@@ -1,11 +1,33 @@
 package com.dateapp.dateapp.chat;
 
+import java.time.LocalDate;
 import java.util.Set;
 
-class ChatDto {
+public class ChatDto {
     private Long id;
     private Set<Long> participantsIds;
+    private LocalDate matchDate;
+    private Long matchId;
     private Set<Long> messageIds;
+
+    ChatDto() {
+    }
+
+    public Long getMatchId() {
+        return matchId;
+    }
+
+    public void setMatchId(Long matchId) {
+        this.matchId = matchId;
+    }
+
+    public LocalDate getMatchDate() {
+        return matchDate;
+    }
+
+    public void setMatchDate(LocalDate matchDate) {
+        this.matchDate = matchDate;
+    }
 
     public Long getId() {
         return id;

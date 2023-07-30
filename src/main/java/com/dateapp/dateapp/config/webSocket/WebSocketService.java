@@ -1,6 +1,5 @@
 package com.dateapp.dateapp.config.webSocket;
 
-import com.dateapp.dateapp.message.Message;
 import com.dateapp.dateapp.message.MessageDto;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;

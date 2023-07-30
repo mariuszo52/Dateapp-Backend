@@ -2,7 +2,9 @@ package com.dateapp.dateapp.message;
 
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,8 +23,11 @@ public class MessageService {
     }
 
     public Set<MessageDto> getChatMessages(long chatId){
-        return messageRepository.findAllByChat_Id(chatId).stream()
+        Set<MessageDto> messages = messageRepository.findAllByChat_Id(chatId).stream()
                 .map(messageMapper::map)
                 .collect(Collectors.toSet());
+        TreeSet<MessageDto> messagesSorted = new TreeSet<>(Comparator.comparing(MessageDto::getSendTime));
+        messagesSorted.addAll(messages);
+        return messagesSorted;
     }
 }

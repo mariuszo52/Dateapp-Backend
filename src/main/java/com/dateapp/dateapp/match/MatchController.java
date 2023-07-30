@@ -7,7 +7,6 @@ import com.dateapp.dateapp.userInfo.UserInfoDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,4 +41,11 @@ class MatchController {
         }
     }
 
-}
+    @GetMapping("/match")
+        ResponseEntity<MatchDto> getMatchInfo(@RequestParam Long id){
+        return ResponseEntity.ok().body(matchService.getMatchById(id));
+
+        }
+    }
+
+

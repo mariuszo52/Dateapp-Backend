@@ -1,7 +1,10 @@
 package com.dateapp.dateapp.match;
 
+import com.dateapp.dateapp.chat.Chat;
 import com.dateapp.dateapp.user.User;
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 
 @Entity
 public class Match {
@@ -13,6 +16,16 @@ public class Match {
     private User user;
     @ManyToOne
     private User matchedUser;
+    private LocalDate matchDate;
+
+    public LocalDate getMatchDate() {
+        return matchDate;
+    }
+
+    public void setMatchDate(LocalDate matchDate) {
+        this.matchDate = matchDate;
+    }
+
 
     public Boolean getMatched() {
         return isMatched;

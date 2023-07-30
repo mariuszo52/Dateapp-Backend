@@ -14,6 +14,8 @@ class ChatMapper {
                 .map(User::getId)
                 .collect(Collectors.toSet());
         chatDto.setParticipantsIds(participantsIds);
+        chatDto.setMatchDate(chat.getMatch().getMatchDate());
+        chatDto.setMatchId(chat.getMatch().getId());
         return chatDto;
     }
 }
