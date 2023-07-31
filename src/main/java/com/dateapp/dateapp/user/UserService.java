@@ -22,7 +22,9 @@ public class UserService {
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
     }
-
+    public Optional<User> findUserById(long id){
+        return userRepository.findById(id);
+    }
     public Optional<User> findUserByEmail(String email){
        return userRepository.findByEmail(email);
     }

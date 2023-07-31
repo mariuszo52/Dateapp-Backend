@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,12 +19,10 @@ import java.util.stream.Collectors;
 public class ChatService {
     private final ChatRepository chatRepository;
     private final UserRepository userRepository;
-    private final MatchMapper matchMapper;
 
-    public ChatService(ChatRepository chatRepository, UserRepository userRepository, MatchMapper matchMapper) {
+    public ChatService(ChatRepository chatRepository, UserRepository userRepository) {
         this.chatRepository = chatRepository;
         this.userRepository = userRepository;
-        this.matchMapper = matchMapper;
     }
         @Transactional
         public void createChat(Match match) {
@@ -37,7 +36,10 @@ public class ChatService {
             chatEntity.setParticipants(participants);
             chatEntity.setMatch(match);
         }
-
+    public Optional<ChatDto> findChatById(long chatId){
+       return chatRepository.findById(chatId)
+                .map(ChatMapper::map);
+    }
 
 
     public Set<ChatDto> getUserChats(long userId) {

@@ -38,7 +38,8 @@ public class LoginController {
     ResponseEntity<String> addUserInfo(@RequestBody UserInfoDto userInfoDto){
         try{
             System.out.println(userInfoDto);
-            userInfoService.addUserInfo(userInfoDto);
+            userInfoService.
+                    addUserInfo(userInfoDto);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

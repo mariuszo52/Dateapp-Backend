@@ -11,7 +11,9 @@ import com.dateapp.dateapp.userInfo.UserInfoMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -26,9 +28,9 @@ public class MatchService {
         this.matchRepository = matchRepository;
         this.userRepository = userRepository;
     }
-    public MatchDto getMatchById(long id){
+    public Optional<MatchDto> getMatchById(long id){
         return matchRepository.findById(id)
-                .map(matchMapper::map).orElseThrow();
+                .map(matchMapper::map);
 
     }
 
@@ -39,6 +41,7 @@ public class MatchService {
         matchDto1.setUserId(matchDto.getMatchedUserId());
         matchDto1.setMatchedUserId(matchDto.getUserId());
         matchDto1.setMatched(true);
+        matchDto1.setMatchDate(LocalDate.now());
         Match match1 = matchMapper.map(matchDto1);
         matchRepository.save(match);
         matchRepository.save(match1);

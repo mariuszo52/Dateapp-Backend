@@ -1,5 +1,7 @@
 package com.dateapp.dateapp.match;
 
+import com.dateapp.dateapp.chat.ChatDto;
+import com.dateapp.dateapp.chat.ChatService;
 import com.dateapp.dateapp.exceptions.UserNotFoundException;
 import com.dateapp.dateapp.user.User;
 import com.dateapp.dateapp.user.UserService;
@@ -36,16 +38,10 @@ class MatchController {
                 return ResponseEntity.ok(allUserMatchesInfo);
             }
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-    @GetMapping("/match")
-        ResponseEntity<MatchDto> getMatchInfo(@RequestParam Long id){
-        return ResponseEntity.ok().body(matchService.getMatchById(id));
-
-        }
-    }
+}
 
 
