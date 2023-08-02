@@ -13,7 +13,7 @@
             <column name="from_user_id" type="BIGINT">
                 <constraints foreignKeyName="fk_user7" referencedTableName="users" referencedColumnNames="id"/>
             </column>
-            <column name="text" type="VARCHAR(100)">
+            <column name="text" type="VARCHAR(1000)">
                 <constraints nullable="true"/>
             </column>
             <column name="chat_id" type="BIGINT">
