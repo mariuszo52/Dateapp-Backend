@@ -1,5 +1,6 @@
 package com.dateapp.dateapp.message;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +15,11 @@ public class MessageController {
     }
 
     @GetMapping("/get-chat-messages")
-    public ResponseEntity<Set<MessageDto>> getChatMessages(@RequestParam Long chatId){
-        Set<MessageDto> chatMessages = messageService.getChatMessages(chatId);
+    public ResponseEntity<Page<MessageDto>> getChatMessages(
+            @RequestParam Long chatId,
+            @RequestParam int page,
+            @RequestParam int size){
+        Page<MessageDto> chatMessages = messageService.getChatMessages(chatId, page, size);
         return ResponseEntity.ok().body(chatMessages);
 
 

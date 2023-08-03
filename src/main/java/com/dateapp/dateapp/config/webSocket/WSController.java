@@ -29,9 +29,6 @@ public class WSController {
           return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-
-
     @MessageMapping("/chat")
     public MessageDto getMessage(MessageDto message){
         return message;

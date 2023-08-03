@@ -9,9 +9,7 @@ import com.dateapp.dateapp.user.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -24,20 +22,22 @@ public class ChatService {
         this.chatRepository = chatRepository;
         this.userRepository = userRepository;
     }
-        @Transactional
-        public void createChat(Match match) {
-            Chat chat = new Chat();
-            Chat chatEntity = chatRepository.save(chat);
-            User user1 = userRepository.findById(match.getUser().getId()).orElseThrow(UserNotFoundException::new);
-            User user2 = userRepository.findById(match.getMatchedUser().getId()).orElseThrow(UserNotFoundException::new);
-            HashSet<User> participants = new HashSet<>();
-            participants.add(user1);
-            participants.add(user2);
-            chatEntity.setParticipants(participants);
-            chatEntity.setMatch(match);
-        }
-    public Optional<ChatDto> findChatById(long chatId){
-       return chatRepository.findById(chatId)
+
+    @Transactional
+    public void createChat(Match match) {
+        Chat chat = new Chat();
+        Chat chatEntity = chatRepository.save(chat);
+        User user1 = userRepository.findById(match.getUser().getId()).orElseThrow(UserNotFoundException::new);
+        User user2 = userRepository.findById(match.getMatchedUser().getId()).orElseThrow(UserNotFoundException::new);
+        HashSet<User> participants = new HashSet<>();
+        participants.add(user1);
+        participants.add(user2);
+        chatEntity.setParticipants(participants);
+        chatEntity.setMatch(match);
+    }
+
+    public Optional<ChatDto> findChatById(long chatId) {
+        return chatRepository.findById(chatId)
                 .map(ChatMapper::map);
     }
 
@@ -46,6 +46,6 @@ public class ChatService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         return user.getChats().stream()
                 .map(ChatMapper::map)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(chatDto -> -chatDto.getId()))));
     }
 }

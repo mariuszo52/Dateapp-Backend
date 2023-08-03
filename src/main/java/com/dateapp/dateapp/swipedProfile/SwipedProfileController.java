@@ -54,10 +54,9 @@ class SwipedProfileController {
                 MatchDto matchDto = createMatchDto(rightSwipedProfile, true);
                 Match match = matchService.saveMatch(matchDto);
                 chatService.createChat(match);
-
-
-
                 swipedProfileService.deleteMatchedLikes(rightSwipedProfile.getUserId(), rightSwipedProfile.getSwipedProfileId());
+
+                return ResponseEntity.ok().body("match");
             }
             else {
                 swipedProfileService.saveRightSwipe(rightSwipedProfile);

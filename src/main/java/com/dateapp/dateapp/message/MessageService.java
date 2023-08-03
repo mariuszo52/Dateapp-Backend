@@ -2,9 +2,12 @@ package com.dateapp.dateapp.message;
 
 import com.dateapp.dateapp.exceptions.EmptyMessageException;
 import com.dateapp.dateapp.exceptions.MessageToLongException;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -33,12 +36,11 @@ public class MessageService {
         messageRepository.save(message);
     }
 
-    public Set<MessageDto> getChatMessages(long chatId){
-        Set<MessageDto> messages = messageRepository.findAllByChat_Id(chatId).stream()
+    public Page<MessageDto> getChatMessages(long chatId, int page, int size){
+        PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+        List<MessageDto> messagesList = messageRepository.findAllByChat_Id(chatId, pageable).stream()
                 .map(messageMapper::map)
-                .collect(Collectors.toSet());
-        TreeSet<MessageDto> messagesSorted = new TreeSet<>(Comparator.comparing(MessageDto::getSendTime));
-        messagesSorted.addAll(messages);
-        return messagesSorted;
+                .collect(Collectors.toList());
+        return new PageImpl<>(messagesList, pageable, messagesList.size());
     }
 }
