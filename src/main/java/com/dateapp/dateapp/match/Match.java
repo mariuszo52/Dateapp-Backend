@@ -16,6 +16,8 @@ public class Match {
     private User user;
     @ManyToOne
     private User matchedUser;
+    @ManyToOne
+    private Chat chat;
     private LocalDate matchDate;
 
     public LocalDate getMatchDate() {
@@ -26,6 +28,13 @@ public class Match {
         this.matchDate = matchDate;
     }
 
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
+    }
 
     public Boolean getMatched() {
         return isMatched;

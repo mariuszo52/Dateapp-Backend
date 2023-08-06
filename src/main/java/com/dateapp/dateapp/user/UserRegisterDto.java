@@ -1,6 +1,7 @@
 package com.dateapp.dateapp.user;
 
 public class UserRegisterDto {
+    private Long id;
     private String email;
     private String password;
     private String confirmPassword;
@@ -21,6 +22,14 @@ public class UserRegisterDto {
         this.email = email;
         this.password = password;
         this.confirmPassword = confirmPassword;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getConfirmPassword() {

@@ -6,6 +6,7 @@ import com.dateapp.dateapp.user.UserRegisterDto;
 import com.dateapp.dateapp.user.UserService;
 import com.dateapp.dateapp.userInfo.UserInfoDto;
 import com.dateapp.dateapp.userInfo.UserInfoService;
+import com.sun.security.auth.UserPrincipal;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,6 +14,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Map;
 
 @RestController
@@ -51,7 +53,8 @@ public class LoginController {
             System.out.println("Login: " + userRegisterDto);
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userRegisterDto.getEmail(), userRegisterDto.getPassword());
             String username = authentication.getName();
-            long id = userService.findUserByEmail(username).orElseThrow().getId();
+            Long id = userService.findUserByEmail(username).orElseThrow().getId();
+            userRegisterDto.setId(id);
             daoAuthenticationProvider.authenticate(authentication);
             String jwtToken = jwtTokenService.generateJwtToken(userRegisterDto);
             Map<String, String> map = Map.of("userId", String.valueOf(id),"jwt", jwtToken);
@@ -61,7 +64,6 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
 
     @PostMapping("/register")
     ResponseEntity<String> register(@RequestBody UserRegisterDto userRegisterDto) {

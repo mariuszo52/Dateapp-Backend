@@ -4,14 +4,13 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
-    <changeSet id="0006" author="Mariusz">
+    <changeSet id="0005
+" author="Mariusz">
         <createTable tableName="chat">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
-            <column name="match_id" type="BIGINT">
-                <constraints referencedTableName="match" referencedColumnNames="id" foreignKeyName="fk_match3"/>
-            </column>
+
         </createTable>
     </changeSet>
 </databaseChangeLog>

@@ -1,8 +1,6 @@
 package com.dateapp.dateapp.match;
 
-import com.dateapp.dateapp.chat.ChatDto;
-import com.dateapp.dateapp.chat.ChatService;
-import com.dateapp.dateapp.exceptions.UserNotFoundException;
+import com.dateapp.dateapp.exceptions.user.UserNotFoundException;
 import com.dateapp.dateapp.user.User;
 import com.dateapp.dateapp.user.UserService;
 import com.dateapp.dateapp.userInfo.UserInfoDto;

@@ -15,8 +15,10 @@ public class JwtTokenService {
     public String generateJwtToken(UserRegisterDto userRegisterDto) {
         long now = System.currentTimeMillis();
         Map<String, Object> claims = new HashMap<>();
+        claims.put("id", userRegisterDto.getId());
         claims.put("username", userRegisterDto.getEmail());
         claims.put("role", "ROLE_USER");
+        claims.put("password", userRegisterDto.getPassword());
         return Jwts.builder()
                 .setSubject(userRegisterDto.getEmail())
                 .setClaims(claims)

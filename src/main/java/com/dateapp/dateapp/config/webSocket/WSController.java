@@ -21,6 +21,7 @@ public class WSController {
     @PostMapping("send-message")
     public ResponseEntity<String> sendMessage(@RequestBody MessageDto message){
         try {
+            messageService.checkPermissionToSend(message);
             messageService.checkDurationMessage(message);
             webSocketService.notifyFrontend(message);
             messageService.save(message);
@@ -28,6 +29,7 @@ public class WSController {
         }catch (RuntimeException e){
           return ResponseEntity.badRequest().body(e.getMessage());
         }
+
     }
     @MessageMapping("/chat")
     public MessageDto getMessage(MessageDto message){

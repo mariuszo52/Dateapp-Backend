@@ -1,51 +1,60 @@
 package com.dateapp.dateapp.chat;
 
-import com.dateapp.dateapp.exceptions.UserNotFoundException;
-import com.dateapp.dateapp.match.Match;
+import com.dateapp.dateapp.config.security.LoggedUserService;
+import com.dateapp.dateapp.exceptions.UnauthorizedResourceAccessException;
+import com.dateapp.dateapp.exceptions.user.UserNotFoundException;
 import com.dateapp.dateapp.match.MatchDto;
-import com.dateapp.dateapp.match.MatchMapper;
 import com.dateapp.dateapp.user.User;
 import com.dateapp.dateapp.user.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.dateapp.dateapp.config.security.LoggedUserService.getLoggedUserId;
 
 
 @Service
 public class ChatService {
     private final ChatRepository chatRepository;
     private final UserRepository userRepository;
+    private final ChatMapper chatMapper;
 
-    public ChatService(ChatRepository chatRepository, UserRepository userRepository) {
+    public ChatService(ChatRepository chatRepository, UserRepository userRepository, ChatMapper chatMapper) {
         this.chatRepository = chatRepository;
         this.userRepository = userRepository;
+        this.chatMapper = chatMapper;
     }
 
-    @Transactional
-    public void createChat(Match match) {
+    public Chat createChat(MatchDto matchDto) {
         Chat chat = new Chat();
-        Chat chatEntity = chatRepository.save(chat);
-        User user1 = userRepository.findById(match.getUser().getId()).orElseThrow(UserNotFoundException::new);
-        User user2 = userRepository.findById(match.getMatchedUser().getId()).orElseThrow(UserNotFoundException::new);
-        HashSet<User> participants = new HashSet<>();
+        User user1 = userRepository.findById(matchDto.getUserId()).orElseThrow();
+        User user2 = userRepository.findById(matchDto.getMatchedUserId()).orElseThrow(UserNotFoundException::new);
+        List<User> participants = new ArrayList<>();
         participants.add(user1);
         participants.add(user2);
-        chatEntity.setParticipants(participants);
-        chatEntity.setMatch(match);
-    }
+        chat.setParticipants(participants);
+        return chatRepository.save(chat);
 
-    public Optional<ChatDto> findChatById(long chatId) {
-        return chatRepository.findById(chatId)
-                .map(ChatMapper::map);
     }
 
 
-    public Set<ChatDto> getUserChats(long userId) {
+    public TreeSet<ChatDto> getUserChats(long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         return user.getChats().stream()
-                .map(ChatMapper::map)
-                .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(chatDto -> -chatDto.getId()))));
+                .map(chatMapper::map)
+                .collect(Collectors.toCollection(() ->
+                        new TreeSet<>(Comparator.comparing(ChatDto::getLastMessageTime).
+                                thenComparingLong(ChatDto::getId).reversed())));
+    }
+    public void checkDataAccessPermission(long userId){
+        if (getLoggedUserId() != userId) {
+            throw new UnauthorizedResourceAccessException();
+        }
     }
 }
+
+
+

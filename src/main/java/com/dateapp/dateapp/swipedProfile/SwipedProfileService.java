@@ -1,12 +1,10 @@
 package com.dateapp.dateapp.swipedProfile;
 
-import com.dateapp.dateapp.exceptions.UserNotFoundException;
+import com.dateapp.dateapp.exceptions.user.UserNotFoundException;
 import com.dateapp.dateapp.user.User;
 import com.dateapp.dateapp.user.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.stream.Collectors;
 
 @Service
 public class SwipedProfileService {

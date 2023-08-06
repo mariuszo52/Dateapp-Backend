@@ -15,14 +15,9 @@ public class MessageController {
     }
 
     @GetMapping("/get-chat-messages")
-    public ResponseEntity<Page<MessageDto>> getChatMessages(
-            @RequestParam Long chatId,
-            @RequestParam int page,
-            @RequestParam int size){
-        Page<MessageDto> chatMessages = messageService.getChatMessages(chatId, page, size);
+    public ResponseEntity<Set<MessageDto>> getChatMessages(@RequestParam Long chatId){
+        Set<MessageDto> chatMessages = messageService.getChatMessages(chatId);
         return ResponseEntity.ok().body(chatMessages);
-
-
     }
 
 }

@@ -7,7 +7,33 @@ public class MatchDto {
     private Long userId;
     private LocalDate matchDate;
     private Long matchedUserId;
+    private String matchedUserName;
+    private String matchedUserUrl;
+    private Long chatId;
 
+    public String getMatchedUserName() {
+        return matchedUserName;
+    }
+
+    public void setMatchedUserName(String matchedUserName) {
+        this.matchedUserName = matchedUserName;
+    }
+
+    public String getMatchedUserUrl() {
+        return matchedUserUrl;
+    }
+
+    public void setMatchedUserUrl(String matchedUserUrl) {
+        this.matchedUserUrl = matchedUserUrl;
+    }
+
+    public Long getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(Long chatId) {
+        this.chatId = chatId;
+    }
 
     public LocalDate getMatchDate() {
         return matchDate;

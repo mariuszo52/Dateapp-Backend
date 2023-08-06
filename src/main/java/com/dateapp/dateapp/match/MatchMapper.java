@@ -2,7 +2,7 @@ package com.dateapp.dateapp.match;
 
 import com.dateapp.dateapp.chat.Chat;
 import com.dateapp.dateapp.chat.ChatRepository;
-import com.dateapp.dateapp.exceptions.UserNotFoundException;
+import com.dateapp.dateapp.exceptions.user.UserNotFoundException;
 import com.dateapp.dateapp.user.User;
 import com.dateapp.dateapp.user.UserRepository;
 import org.springframework.stereotype.Service;
@@ -26,6 +26,8 @@ public class MatchMapper {
         match.setUser(user);
         User matchedUser = userRepository.findById(matchDto.getMatchedUserId()).orElseThrow(UserNotFoundException::new);
         match.setMatchedUser(matchedUser);
+        Chat chat = chatRepository.findById(matchDto.getChatId()).orElseThrow();
+        match.setChat(chat);
         match.setMatchDate(LocalDate.now());
         return match;
     }
@@ -35,6 +37,9 @@ public class MatchMapper {
         matchDto.setUserId(match.getUser().getId());
         matchDto.setMatchedUserId(match.getMatchedUser().getId());
         matchDto.setMatchDate(LocalDate.now());
+        matchDto.setChatId(match.getChat().getId());
+        matchDto.setMatchedUserName(match.getMatchedUser().getUserInfo().getFirstName());
+        matchDto.setMatchedUserUrl(match.getMatchedUser().getUserInfo().getUrl());
         return matchDto;
     }
 

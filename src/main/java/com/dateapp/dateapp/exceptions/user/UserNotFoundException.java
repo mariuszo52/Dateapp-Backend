@@ -1,4 +1,4 @@
-package com.dateapp.dateapp.exceptions;
+package com.dateapp.dateapp.exceptions.user;
 
 public class UserNotFoundException extends RuntimeException {
     private static final String MESSAGE = "User not found.";

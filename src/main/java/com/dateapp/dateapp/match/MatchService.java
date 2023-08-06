@@ -1,15 +1,13 @@
 package com.dateapp.dateapp.match;
 
 import com.dateapp.dateapp.chat.Chat;
-import com.dateapp.dateapp.chat.ChatDto;
-import com.dateapp.dateapp.exceptions.UserNotFoundException;
+import com.dateapp.dateapp.exceptions.user.UserNotFoundException;
 import com.dateapp.dateapp.swipedProfile.SwipedProfileDto;
 import com.dateapp.dateapp.user.User;
 import com.dateapp.dateapp.user.UserRepository;
 import com.dateapp.dateapp.userInfo.UserInfoDto;
 import com.dateapp.dateapp.userInfo.UserInfoMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -34,8 +32,20 @@ public class MatchService {
 
     }
 
-    @Transactional
-    public Match saveMatch(MatchDto matchDto) {
+    public void saveMatch(MatchDto matchDto, Chat chat) {
+        matchDto.setChatId(chat.getId());
+        Match match = matchMapper.map(matchDto);
+        MatchDto matchDto1 = new MatchDto();
+        matchDto1.setUserId(matchDto.getMatchedUserId());
+        matchDto1.setMatchedUserId(matchDto.getUserId());
+        matchDto1.setMatched(true);
+        matchDto1.setMatchDate(LocalDate.now());
+        matchDto1.setChatId(chat.getId());
+        Match match1 = matchMapper.map(matchDto1);
+        matchRepository.save(match);
+        matchRepository.save(match1);
+    }
+    public void saveMissMatch(MatchDto matchDto) {
         Match match = matchMapper.map(matchDto);
         MatchDto matchDto1 = new MatchDto();
         matchDto1.setUserId(matchDto.getMatchedUserId());
@@ -45,7 +55,6 @@ public class MatchService {
         Match match1 = matchMapper.map(matchDto1);
         matchRepository.save(match);
         matchRepository.save(match1);
-        return match;
     }
 
     public boolean checkMatch(SwipedProfileDto rightSwipedProfile, String swipeDirection) {

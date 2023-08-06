@@ -1,9 +1,6 @@
 package com.dateapp.dateapp.like;
 
-import com.dateapp.dateapp.exceptions.UserNotFoundException;
 import com.dateapp.dateapp.swipedProfile.*;
-import com.dateapp.dateapp.user.User;
-import com.dateapp.dateapp.user.UserMapper;
 import com.dateapp.dateapp.user.UserRepository;
 import com.dateapp.dateapp.userInfo.UserInfoDto;
 import com.dateapp.dateapp.userInfo.UserInfoMapper;

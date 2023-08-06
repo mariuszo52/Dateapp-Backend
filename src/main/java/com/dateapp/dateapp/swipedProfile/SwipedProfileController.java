@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.dateapp.dateapp.swipedProfile.SwipedProfileService.LEFT_SWIPE;
 import static com.dateapp.dateapp.swipedProfile.SwipedProfileService.RIGHT_SWIPE;
 
@@ -31,7 +33,7 @@ class SwipedProfileController {
         try {
             if (matchService.checkMatch(leftSwipedProfile, RIGHT_SWIPE)) {
                 MatchDto matchDto = createMatchDto(leftSwipedProfile, false);
-                matchService.saveMatch(matchDto);
+                matchService.saveMissMatch(matchDto);
                 swipedProfileService.deleteMatchedLikes(leftSwipedProfile.getUserId(), leftSwipedProfile.getSwipedProfileId());
 
             } else {
@@ -48,12 +50,12 @@ class SwipedProfileController {
         try {
             if (matchService.checkMatch(rightSwipedProfile, LEFT_SWIPE )) {
                 MatchDto matchDto = createMatchDto(rightSwipedProfile, false);
-                matchService.saveMatch(matchDto);
+                matchService.saveMissMatch(matchDto);
             }
             else if(matchService.checkMatch(rightSwipedProfile, RIGHT_SWIPE)) {
                 MatchDto matchDto = createMatchDto(rightSwipedProfile, true);
-                Match match = matchService.saveMatch(matchDto);
-                chatService.createChat(match);
+                Chat chat = chatService.createChat(matchDto);
+                matchService.saveMatch(matchDto, chat);
                 swipedProfileService.deleteMatchedLikes(rightSwipedProfile.getUserId(), rightSwipedProfile.getSwipedProfileId());
 
                 return ResponseEntity.ok().body("match");

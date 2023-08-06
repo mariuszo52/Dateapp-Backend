@@ -2,7 +2,7 @@ package com.dateapp.dateapp.message;
 
 import com.dateapp.dateapp.chat.Chat;
 import com.dateapp.dateapp.chat.ChatRepository;
-import com.dateapp.dateapp.exceptions.UserNotFoundException;
+import com.dateapp.dateapp.exceptions.user.UserNotFoundException;
 import com.dateapp.dateapp.user.User;
 import com.dateapp.dateapp.user.UserRepository;
 import org.springframework.stereotype.Service;

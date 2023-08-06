@@ -1,6 +1,6 @@
 package com.dateapp.dateapp.userInfo;
 
-import com.dateapp.dateapp.exceptions.UserNotFoundException;
+import com.dateapp.dateapp.exceptions.user.UserNotFoundException;
 import com.dateapp.dateapp.user.User;
 import com.dateapp.dateapp.user.UserRepository;
 import org.springframework.stereotype.Service;

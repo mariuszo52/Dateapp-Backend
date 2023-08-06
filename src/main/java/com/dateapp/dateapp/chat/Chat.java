@@ -5,7 +5,7 @@ import com.dateapp.dateapp.message.Message;
 import com.dateapp.dateapp.user.User;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,24 +19,28 @@ public class Chat {
     @JoinTable(name = "chat_users",
             joinColumns = @JoinColumn(name = "chat_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    private Set<User> participants = new HashSet<>();
+    private List<User> participants = new ArrayList<>();
     @OneToMany(mappedBy = "chat")
     private Set<Message> messages = new HashSet<>();
-    @OneToOne
-    private Match match;
+    @OneToMany(mappedBy = "chat")
+    private List<Match> match = new ArrayList<>();
 
-    public Match getMatch() {
+    public List<Match> getMatch() {
         return match;
     }
 
-    public void setMatch(Match match) {
+    public void setMatch(List<Match> match) {
         this.match = match;
     }
 
     public Chat() {
     }
 
-    public Chat(Set<User> participants) {
+    public List<User> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<User> participants) {
         this.participants = participants;
     }
 
@@ -48,13 +52,6 @@ public class Chat {
         this.id = id;
     }
 
-    public Set<User> getParticipants() {
-        return participants;
-    }
-
-    public void setParticipants(Set<User> participants) {
-        this.participants = participants;
-    }
 
     public Set<Message> getMessages() {
         return messages;

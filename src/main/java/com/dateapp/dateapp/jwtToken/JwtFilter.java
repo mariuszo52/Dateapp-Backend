@@ -1,5 +1,6 @@
 package com.dateapp.dateapp.jwtToken;
 
+import com.dateapp.dateapp.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -24,7 +25,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
         System.out.println(path);
-        return "/register".equals(path) || "/login".equals(path) || path.equals("/userinfo") || path.contains("chat")
+        return "/register".equals(path) || "/login".equals(path) || path.equals("/userinfo") || path.startsWith("/chat")
                 || path.contains("h2-console");
     }
 
@@ -58,10 +59,14 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthenticationByToken(Jws<Claims> jws) {
+        Long id = jws.getBody().get("id", Long.class);
         String username = jws.getBody().get("username", String.class);
         String userRole = jws.getBody().get("role", String.class);
-        return new UsernamePasswordAuthenticationToken(username, null, Collections.singleton
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, Collections.singleton
                 (new SimpleGrantedAuthority(userRole)));
+        User user = new User(id, username);
+        authenticationToken.setDetails(user);
+        return authenticationToken;
     }
 
 }
