@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-class SwipeService {
+public class SwipeService {
     private final UserRepository userRepository;
 
     SwipeService(UserRepository userRepository) {

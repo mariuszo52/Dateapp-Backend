@@ -9,12 +9,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-class LikeService {
-    private final UserRepository userRepository;
+public class LikeService {
     private final SwipedProfileRepository swipedProfileRepository;
 
-    LikeService(UserRepository userRepository, SwipedProfileRepository swipedProfileRepository) {
-        this.userRepository = userRepository;
+    LikeService(SwipedProfileRepository swipedProfileRepository) {
         this.swipedProfileRepository = swipedProfileRepository;
     }
 

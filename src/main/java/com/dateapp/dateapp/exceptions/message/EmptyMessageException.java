@@ -1,6 +1,6 @@
 package com.dateapp.dateapp.exceptions.message;
 
-public class EmptyMessageException extends RuntimeException{
+public class EmptyMessageException extends MessageException{
     private static final String MESSAGE = "Message cannot be empty.";
     public EmptyMessageException(){
         super(MESSAGE);

@@ -5,7 +5,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-class WebSocketService {
+public class WebSocketService {
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     WebSocketService(SimpMessagingTemplate simpMessagingTemplate) {

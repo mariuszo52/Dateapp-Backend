@@ -3,6 +3,7 @@ package com.dateapp.dateapp.swipedProfile;
 import com.dateapp.dateapp.chat.Chat;
 import com.dateapp.dateapp.chat.ChatDto;
 import com.dateapp.dateapp.chat.ChatService;
+import com.dateapp.dateapp.config.security.EndpointAccessCheckService;
 import com.dateapp.dateapp.match.Match;
 import com.dateapp.dateapp.match.MatchDto;
 import com.dateapp.dateapp.match.MatchService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.dateapp.dateapp.config.security.EndpointAccessCheckService.checkDataAccessPermission;
 import static com.dateapp.dateapp.swipedProfile.SwipedProfileService.LEFT_SWIPE;
 import static com.dateapp.dateapp.swipedProfile.SwipedProfileService.RIGHT_SWIPE;
 
@@ -31,6 +33,7 @@ class SwipedProfileController {
     @PostMapping("/swipe-left")
     ResponseEntity<String> addLeftSwipedProfile(@RequestBody SwipedProfileDto leftSwipedProfile) {
         try {
+            checkDataAccessPermission(leftSwipedProfile.getUserId());
             if (matchService.checkMatch(leftSwipedProfile, RIGHT_SWIPE)) {
                 MatchDto matchDto = createMatchDto(leftSwipedProfile, false);
                 matchService.saveMissMatch(matchDto);
@@ -48,19 +51,18 @@ class SwipedProfileController {
     @PostMapping("/swipe-right")
     ResponseEntity<String> addRightSwipedProfile(@RequestBody SwipedProfileDto rightSwipedProfile) {
         try {
-            if (matchService.checkMatch(rightSwipedProfile, LEFT_SWIPE )) {
+            checkDataAccessPermission(rightSwipedProfile.getUserId());
+            if (matchService.checkMatch(rightSwipedProfile, LEFT_SWIPE)) {
                 MatchDto matchDto = createMatchDto(rightSwipedProfile, false);
                 matchService.saveMissMatch(matchDto);
-            }
-            else if(matchService.checkMatch(rightSwipedProfile, RIGHT_SWIPE)) {
+            } else if (matchService.checkMatch(rightSwipedProfile, RIGHT_SWIPE)) {
                 MatchDto matchDto = createMatchDto(rightSwipedProfile, true);
                 Chat chat = chatService.createChat(matchDto);
                 matchService.saveMatch(matchDto, chat);
                 swipedProfileService.deleteMatchedLikes(rightSwipedProfile.getUserId(), rightSwipedProfile.getSwipedProfileId());
 
                 return ResponseEntity.ok().body("match");
-            }
-            else {
+            } else {
                 swipedProfileService.saveRightSwipe(rightSwipedProfile);
             }
             return ResponseEntity.ok().build();

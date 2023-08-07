@@ -36,25 +36,25 @@ public class ChatMapper {
                 .map(matchMapper::map)
                 .collect(Collectors.toCollection(ArrayList::new));
         chatDto.setMatchDtos(matchesDtos);
+        setLastMessage(chat, chatDto);
+        return chatDto;
+}
+
+    private static void setLastMessage(Chat chat, ChatDto chatDto) {
         TreeSet<Message> messages = chat.getMessages().stream()
                 .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Message::getSendTime))));
         Message lastMessage = null;
         if(!messages.isEmpty()) {
             int lastMessageIndex = messages.size() - 1;
-            System.out.println("index " + lastMessageIndex);
             lastMessage = (Message) messages.toArray()[lastMessageIndex];
         }
         if (!messages.isEmpty() && lastMessage != null) {
 
             chatDto.setLastMessage(lastMessage.getText());
             chatDto.setLastMessageTime(lastMessage.getSendTime());
-            System.out.println("pierwszy if");
         } else {
             chatDto.setLastMessage(DEFAULT_MESSAGE);
             chatDto.setLastMessageTime(DEFAULT_DATETIME);
-            System.out.println("else");
     }
-        System.out.println("czat dto" + chatDto);
-        return chatDto;
+    }
 }
-                }

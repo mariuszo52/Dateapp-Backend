@@ -1,5 +1,6 @@
 package com.dateapp.dateapp.like;
 
+import com.dateapp.dateapp.config.security.EndpointAccessCheckService;
 import com.dateapp.dateapp.swipedProfile.SwipedProfileDto;
 import com.dateapp.dateapp.userInfo.UserInfoDto;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static com.dateapp.dateapp.config.security.EndpointAccessCheckService.checkDataAccessPermission;
+
 @RestController
 @CrossOrigin
 public class LikeController {
@@ -23,13 +26,13 @@ public class LikeController {
         this.likeService = likeService;
     }
    @GetMapping("/likes-received")
-    ResponseEntity<List<UserInfoDto>> getAllUserReceivedLikes(@RequestParam long userId){
+    ResponseEntity<?> getAllUserReceivedLikes(@RequestParam long userId){
         try {
+            checkDataAccessPermission(userId);
             List<UserInfoDto> allUserReceivedLikes = likeService.getAllUserReceivedLikes(userId);
-            System.out.println("otrzymane lajki " + allUserReceivedLikes);
             return ResponseEntity.ok(allUserReceivedLikes);
         }catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
     }
 

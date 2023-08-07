@@ -49,11 +49,7 @@ public class ChatService {
                         new TreeSet<>(Comparator.comparing(ChatDto::getLastMessageTime).
                                 thenComparingLong(ChatDto::getId).reversed())));
     }
-    public void checkDataAccessPermission(long userId){
-        if (getLoggedUserId() != userId) {
-            throw new UnauthorizedResourceAccessException();
-        }
-    }
+
 }
 
 

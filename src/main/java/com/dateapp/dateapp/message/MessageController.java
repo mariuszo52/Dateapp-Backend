@@ -1,6 +1,7 @@
 package com.dateapp.dateapp.message;
 
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +16,15 @@ public class MessageController {
     }
 
     @GetMapping("/get-chat-messages")
-    public ResponseEntity<Set<MessageDto>> getChatMessages(@RequestParam Long chatId){
-        Set<MessageDto> chatMessages = messageService.getChatMessages(chatId);
-        return ResponseEntity.ok().body(chatMessages);
+    public ResponseEntity<?> getChatMessages(@RequestParam Long chatId){
+        try{
+            messageService.checkAccessToGetMessages(chatId);
+            Set<MessageDto> chatMessages = messageService.getChatMessages(chatId);
+            return ResponseEntity.ok().body(chatMessages);
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+
     }
 
 }

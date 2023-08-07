@@ -23,31 +23,23 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getRequestURI();
-        System.out.println(path);
-        return "/register".equals(path) || "/login".equals(path) || path.equals("/userinfo") || path.startsWith("/chat")
-                || path.contains("h2-console");
+        return notFilteredPaths(request);
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("authorization");
         boolean isOptionsMethod = request.getMethod().equals(HttpMethod.OPTIONS.name());
-        if(isOptionsMethod){
+        if (isOptionsMethod) {
             filterChain.doFilter(request, response);
-        }
-        else if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        } else if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             response.setStatus(HttpStatus.FORBIDDEN.value());
-        }
-        else{
+        } else {
             Jws<Claims> claimsJws = parseToken(authHeader);
             UsernamePasswordAuthenticationToken authenticationByToken = getAuthenticationByToken(claimsJws);
             SecurityContextHolder.getContext().setAuthentication(authenticationByToken);
             filterChain.doFilter(request, response);
         }
-
 
 
     }
@@ -62,11 +54,16 @@ public class JwtFilter extends OncePerRequestFilter {
         Long id = jws.getBody().get("id", Long.class);
         String username = jws.getBody().get("username", String.class);
         String userRole = jws.getBody().get("role", String.class);
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, Collections.singleton
-                (new SimpleGrantedAuthority(userRole)));
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, Collections.singleton(new SimpleGrantedAuthority(userRole)));
         User user = new User(id, username);
         authenticationToken.setDetails(user);
         return authenticationToken;
+    }
+
+    private boolean notFilteredPaths(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        System.out.println(path);
+        return path.equals("/register") || path.equals("/login") || path.equals("/userinfo") || path.startsWith("/chat") || path.startsWith("/h2-console");
     }
 
 }

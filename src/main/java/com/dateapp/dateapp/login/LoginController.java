@@ -33,24 +33,26 @@ public class LoginController {
     }
     @GetMapping("/userinfo")
     ResponseEntity<UserInfoDto> getUserInfo(@RequestParam Long userId){
-        UserInfoDto userInfoDto = userInfoService.getUserInfoByUserId(userId).orElseThrow();
-        return ResponseEntity.ok().body(userInfoDto);
+        try {
+            UserInfoDto userInfoDto = userInfoService.getUserInfoByUserId(userId).orElseThrow();
+            return ResponseEntity.ok().body(userInfoDto);
+        }catch (RuntimeException e){
+            return ResponseEntity.badRequest().build();
+        }
+
     }
     @PostMapping("/userinfo")
     ResponseEntity<String> addUserInfo(@RequestBody UserInfoDto userInfoDto){
         try{
-            System.out.println(userInfoDto);
-            userInfoService.
-                    addUserInfo(userInfoDto);
+            userInfoService.addUserInfo(userInfoDto);
             return ResponseEntity.status(HttpStatus.CREATED).build();
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
     @PostMapping("/login")
     ResponseEntity<?> login(@RequestBody UserRegisterDto userRegisterDto) {
         try {
-            System.out.println("Login: " + userRegisterDto);
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userRegisterDto.getEmail(), userRegisterDto.getPassword());
             String username = authentication.getName();
             Long id = userService.findUserByEmail(username).orElseThrow().getId();
@@ -59,8 +61,7 @@ public class LoginController {
             String jwtToken = jwtTokenService.generateJwtToken(userRegisterDto);
             Map<String, String> map = Map.of("userId", String.valueOf(id),"jwt", jwtToken);
             return ResponseEntity.ok(map);
-        } catch (AuthenticationException e) {
-            System.out.println(e.getMessage());
+        } catch (RuntimeException  e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }

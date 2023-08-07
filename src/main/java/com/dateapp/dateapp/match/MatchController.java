@@ -1,5 +1,6 @@
 package com.dateapp.dateapp.match;
 
+import com.dateapp.dateapp.config.security.EndpointAccessCheckService;
 import com.dateapp.dateapp.exceptions.user.UserNotFoundException;
 import com.dateapp.dateapp.user.User;
 import com.dateapp.dateapp.user.UserService;
@@ -14,30 +15,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static com.dateapp.dateapp.config.security.EndpointAccessCheckService.checkDataAccessPermission;
+
 @RestController
 @CrossOrigin
 class MatchController {
     private final MatchService matchService;
-    private final UserService userService;
 
-    MatchController(MatchService matchService, UserService userService) {
+    MatchController(MatchService matchService) {
         this.matchService = matchService;
-        this.userService = userService;
     }
 
 
     @GetMapping("/all-matches")
     ResponseEntity<?> getAllUserMatches(@RequestParam long userId) {
         try {
-            User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
-                    .orElseThrow(UserNotFoundException::new);
-            if (user.getId() == userId) {
-                List<UserInfoDto> allUserMatchesInfo = matchService.getAllUserMatchesInfo(userId);
-                return ResponseEntity.ok(allUserMatchesInfo);
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            checkDataAccessPermission(userId);
+            List<UserInfoDto> allUserMatchesInfo = matchService.getAllUserMatchesInfo(userId);
+            return ResponseEntity.ok(allUserMatchesInfo);
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
     }
 }

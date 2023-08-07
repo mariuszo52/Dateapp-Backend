@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
-class MessageMapper {
+public class MessageMapper {
     private final ChatRepository chatRepository;
     private final UserRepository userRepository;
 
