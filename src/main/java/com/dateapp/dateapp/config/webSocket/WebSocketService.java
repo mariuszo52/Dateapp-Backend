@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 public class WebSocketService {
     private final SimpMessagingTemplate simpMessagingTemplate;
 
+
     WebSocketService(SimpMessagingTemplate simpMessagingTemplate) {
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
@@ -15,4 +16,5 @@ public class WebSocketService {
     public void notifyFrontend(MessageDto messageDto){
         simpMessagingTemplate.convertAndSend("/topic/" + messageDto.getChatId(), messageDto);
     }
+
 }

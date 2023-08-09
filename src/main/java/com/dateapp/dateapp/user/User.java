@@ -1,6 +1,7 @@
 package com.dateapp.dateapp.user;
 
 import com.dateapp.dateapp.chat.Chat;
+import com.dateapp.dateapp.config.webSocket.connectionTicket.Ticket;
 import com.dateapp.dateapp.match.Match;
 import com.dateapp.dateapp.swipedProfile.SwipedProfile;
 import com.dateapp.dateapp.userInfo.UserInfo;
@@ -37,7 +38,6 @@ public class User implements UserDetails {
     private List<Match> matches;
     @ManyToMany(mappedBy = "participants")
     private Set<Chat> chats = new HashSet<>();
-
 
 
     public void setMatches(List<Match> matches) {

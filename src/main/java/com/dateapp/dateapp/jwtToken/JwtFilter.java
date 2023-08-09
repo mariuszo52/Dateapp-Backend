@@ -63,7 +63,8 @@ public class JwtFilter extends OncePerRequestFilter {
     private boolean notFilteredPaths(HttpServletRequest request) {
         String path = request.getRequestURI();
         System.out.println(path);
-        return path.equals("/register") || path.equals("/login") || path.equals("/userinfo") || path.startsWith("/chat") || path.startsWith("/h2-console");
+        return path.equals("/register") || path.equals("/login")
+                || path.equals("/userinfo") || path.startsWith("/chat") || path.startsWith("/h2-console");
     }
 
 }
