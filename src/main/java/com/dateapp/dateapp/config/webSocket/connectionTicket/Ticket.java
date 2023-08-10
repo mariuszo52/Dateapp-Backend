@@ -8,12 +8,27 @@ public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String value;
+    private String text;
     private boolean validity;
+
     @OneToOne
     private User user;
 
     public Ticket() {
+    }
+
+    public Ticket(String text, User user) {
+        this.text = text;
+        this.validity = true;
+        this.user = user;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public User getUser() {
@@ -25,19 +40,8 @@ public class Ticket {
     }
 
 
-    public Ticket(String value, User user) {
-        this.value = value;
-        this.user = user;
-        this.validity = true;
-    }
 
-    public String getValue() {
-        return value;
-    }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
 
     public boolean isValidity() {
         return validity;
@@ -47,15 +51,6 @@ public class Ticket {
         this.validity = validity;
     }
 
-    @Override
-    public String toString() {
-        return "Ticket{" +
-                "id=" + id +
-                ", value='" + value + '\'' +
-                ", validity=" + validity +
-                ", user=" + user +
-                '}';
-    }
 
     public void setId(Long id) {
         this.id = id;

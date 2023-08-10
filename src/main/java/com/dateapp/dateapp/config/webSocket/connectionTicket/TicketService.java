@@ -6,6 +6,7 @@ import com.dateapp.dateapp.user.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.util.stream.StreamSupport;
 
 @Service
 public class TicketService {
@@ -20,18 +21,22 @@ public class TicketService {
         this.ticketRepository = ticketRepository;
     }
 
-    public Ticket generateTicket(Long userId){
+    public TicketDto generateTicket(Long userId){
         SecureRandom secureRandom = new SecureRandom();
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0 ; i < TICKET_LENGTH ; i++){
             int index = secureRandom.nextInt(AVAILABLE_CHARS.length());
             stringBuilder.append(AVAILABLE_CHARS.charAt(index));
         }
-        String ticketValue = stringBuilder.toString();
+        String ticketText = stringBuilder.toString();
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Ticket ticket = new Ticket(ticketValue, user);
-        System.out.println(ticket);
-        return ticketRepository.save(ticket);
+        Ticket ticket  = ticketRepository.save(new Ticket(ticketText, user));
+        return TicketMapper.map(ticket);
+    }
+
+    public boolean checkTicket (String ticketText) {
+        return StreamSupport.stream(ticketRepository.findAll().spliterator(), false)
+                .anyMatch(ticket -> ticket.getText().equals(ticketText));
     }
 
 

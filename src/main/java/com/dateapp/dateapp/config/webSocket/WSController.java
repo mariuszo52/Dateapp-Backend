@@ -1,6 +1,7 @@
 package com.dateapp.dateapp.config.webSocket;
 
 import com.dateapp.dateapp.config.webSocket.connectionTicket.Ticket;
+import com.dateapp.dateapp.config.webSocket.connectionTicket.TicketDto;
 import com.dateapp.dateapp.config.webSocket.connectionTicket.TicketService;
 import com.dateapp.dateapp.exceptions.UnauthorizedResourceAccessException;
 import com.dateapp.dateapp.exceptions.chat.ChatNotFoundException;
@@ -11,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.stream.StreamSupport;
 
 @CrossOrigin
 @RestController
@@ -40,13 +43,22 @@ public class WSController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
     }
-        @PostMapping("ws-ticket")
-        public ResponseEntity<Ticket> getAndSaveTicket(@RequestParam Long userId) {
-        return ResponseEntity.ok().body(ticketService.generateTicket(userId));
 
+    @PostMapping("ws-ticket")
+    public ResponseEntity<TicketDto> getAndSaveTicket(@RequestParam Long userId) {
+        return ResponseEntity.ok().body(ticketService.generateTicket(userId));
+    }
+
+    @GetMapping("ticket-validity")
+    public ResponseEntity<Boolean> checkTicketValidity(@RequestParam String ticketText) {
+        boolean isValid = ticketService.checkTicket(ticketText);
+        if (isValid) {
+            return ResponseEntity.ok().body(true);
+        } else {
+            return ResponseEntity.ok().body(false);
         }
 
-
+    }
 
 
     @MessageMapping("/chat")

@@ -1,6 +1,8 @@
 package com.dateapp.dateapp.config.webSocket;
 
+import com.dateapp.dateapp.config.webSocket.connectionTicket.Ticket;
 import com.dateapp.dateapp.config.webSocket.connectionTicket.TicketRepository;
+import com.dateapp.dateapp.exceptions.UnauthorizedResourceAccessException;
 import com.sun.security.auth.UserPrincipal;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import java.security.Principal;
 import java.util.Map;
 import java.util.Random;
 import java.util.stream.StreamSupport;
+
 @Service
 public class CustomHandshakeHandler extends DefaultHandshakeHandler {
     private final TicketRepository ticketRepository;
@@ -19,26 +22,16 @@ public class CustomHandshakeHandler extends DefaultHandshakeHandler {
         this.ticketRepository = ticketRepository;
     }
 
-    @Override
-    protected boolean isValidOrigin(ServerHttpRequest request) {
-        return checkTicket(request);
-
-    }
 
     @Override
     protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler, Map<String, Object> attributes) {
-
-
-        Random random = new Random();
-        long randomId = random.nextLong(1, 1000000000);
-        return new UserPrincipal(Long.toString(randomId));
-    }
-
-    private boolean checkTicket(ServerHttpRequest request) {
         String query = request.getURI().getRawQuery();
-        String ticketValue = query.substring(12);
-        System.out.println("WS query " + query);
-        return StreamSupport.stream(ticketRepository.findAll().spliterator(), false)
-                .anyMatch(ticket -> ticket.getValue().equals(ticketValue));
+        String ticketText = query.substring(11);
+        System.out.println(ticketText);
+        Ticket ticket = ticketRepository.findByText(ticketText).orElseThrow();
+        ticketRepository.delete(ticket);
+        return new UserPrincipal(Long.toString(ticket.getUser().getId()));
     }
+
+
 }
