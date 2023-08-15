@@ -11,9 +11,11 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private final TicketRepository ticketRepository;
+    private final CustomHandshakeInterceptor customHandshakeInterceptor;
 
-    public WebSocketConfig(TicketRepository ticketRepository) {
+    public WebSocketConfig(TicketRepository ticketRepository, CustomHandshakeInterceptor customHandshakeInterceptor) {
         this.ticketRepository = ticketRepository;
+        this.customHandshakeInterceptor = customHandshakeInterceptor;
     }
 
 
@@ -21,6 +23,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/chat")
                 .setHandshakeHandler(new CustomHandshakeHandler(ticketRepository))
+                .addInterceptors(customHandshakeInterceptor)
                 .setAllowedOrigins("http://localhost:3000")
                 .withSockJS();
     }

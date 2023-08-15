@@ -2,6 +2,7 @@ package com.dateapp.dateapp.chat;
 
 import com.dateapp.dateapp.config.security.LoggedUserService;
 import com.dateapp.dateapp.exceptions.UnauthorizedResourceAccessException;
+import com.dateapp.dateapp.exceptions.chat.ChatNotFoundException;
 import com.dateapp.dateapp.exceptions.user.UserNotFoundException;
 import com.dateapp.dateapp.match.MatchDto;
 import com.dateapp.dateapp.user.User;
@@ -44,12 +45,14 @@ public class ChatService {
     public TreeSet<ChatDto> getUserChats(long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         return user.getChats().stream()
-                .map(chatMapper::map)
-                .collect(Collectors.toCollection(() ->
-                        new TreeSet<>(Comparator.comparing(ChatDto::getLastMessageTime).
-                                thenComparingLong(ChatDto::getId).reversed())));
+                .map(chatMapper::map).collect(Collectors.toCollection(() ->
+                        new TreeSet<>(Comparator.comparing(ChatDto::getLastMessageTime)
+                                .thenComparingLong(ChatDto::getId).reversed())));
     }
-
+    public ChatDto findChatById(long id){
+        Chat chat = chatRepository.findById(id).orElseThrow(ChatNotFoundException::new);
+        return chatMapper.map(chat);
+    }
 }
 
 

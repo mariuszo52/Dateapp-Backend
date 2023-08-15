@@ -9,7 +9,7 @@ public class UserInfoMapper {
                 userInfoDto.getMonthOfBirth(), userInfoDto.getDayOfBirth());
         userInfo.setDateOfBirth(dateOfBirth);
         userInfo.setFirstName(userInfoDto.getFirstName());
-        userInfo.setShowGender(userInfoDto.getShowGender());
+        userInfo.setLocation(userInfoDto.getLocation());
         userInfo.setGenderIdentity(userInfoDto.getGenderIdentity());
         userInfo.setGenderInterest(userInfoDto.getGenderInterest());
         userInfo.setUrl(userInfoDto.getUrl());
@@ -25,7 +25,7 @@ public class UserInfoMapper {
         userInfoDto.setDayOfBirth(userInfo.getDateOfBirth().getDayOfMonth());
         userInfoDto.setMonthOfBirth(userInfo.getDateOfBirth().getMonthValue());
         userInfoDto.setYearOfBirth(userInfo.getDateOfBirth().getYear());
-        userInfoDto.setShowGender(userInfo.getShowGender());
+        userInfoDto.setLocation(userInfo.getLocation());
         userInfoDto.setGenderIdentity(userInfo.getGenderIdentity());
         userInfoDto.setGenderInterest(userInfo.getGenderInterest());
         userInfoDto.setUrl(userInfo.getUrl());

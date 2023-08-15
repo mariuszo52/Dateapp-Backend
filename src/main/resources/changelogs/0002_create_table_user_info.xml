@@ -15,7 +15,7 @@
             <column name="date_of_birth" type="DATE" >
                 <constraints nullable="false"/>
             </column>
-            <column name="show_gender" type="boolean">
+            <column name="location" type="VARCHAR(200)">
                 <constraints nullable="false"/>
             </column>
             <column name="gender_identity" type="VARCHAR(50)">

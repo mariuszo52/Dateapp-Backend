@@ -10,12 +10,24 @@ public class UserInfoDto {
     private int dayOfBirth;
     private int monthOfBirth;
     private int yearOfBirth;
-    private Boolean showGender;
+    private String location;
     private String genderIdentity;
     private String genderInterest;
     private String url;
     private String about;
     private long userId;
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
 
     public int getAge() {
         return age;
@@ -23,23 +35,6 @@ public class UserInfoDto {
 
     public void setAge() {
         this.age = (int) ChronoUnit.YEARS.between(LocalDate.of(yearOfBirth, monthOfBirth, dayOfBirth), LocalDate.now());
-    }
-
-    @Override
-    public String toString() {
-        return "UserInfoDto{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", dayOfBirth=" + dayOfBirth +
-                ", monthOfBirth=" + monthOfBirth +
-                ", yearOfBirth=" + yearOfBirth +
-                ", showGender=" + showGender +
-                ", genderIdentity='" + genderIdentity + '\'' +
-                ", genderInterest='" + genderInterest + '\'' +
-                ", url='" + url + '\'' +
-                ", about='" + about + '\'' +
-                ", userId=" + userId +
-                '}';
     }
 
     public long getUserId() {
@@ -93,13 +88,6 @@ public class UserInfoDto {
         this.yearOfBirth = yearOfBirth;
     }
 
-    public Boolean getShowGender() {
-        return showGender;
-    }
-
-    public void setShowGender(Boolean showGender) {
-        this.showGender = showGender;
-    }
 
     public String getGenderIdentity() {
         return genderIdentity;

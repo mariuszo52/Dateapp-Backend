@@ -11,13 +11,21 @@ public class UserInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String firstName;
+    private String location;
     private LocalDate dateOfBirth;
-    private Boolean showGender;
     private String genderIdentity;
     private String genderInterest;
     private String url;
     private String about;
     private Long userId;
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     public Long getUserId() {
         return userId;
@@ -54,13 +62,6 @@ public class UserInfo {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public Boolean getShowGender() {
-        return showGender;
-    }
-
-    public void setShowGender(Boolean showGender) {
-        this.showGender = showGender;
-    }
 
     public String getGenderIdentity() {
         return genderIdentity;

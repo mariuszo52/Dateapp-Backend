@@ -27,9 +27,7 @@ public class CustomHandshakeHandler extends DefaultHandshakeHandler {
     protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler, Map<String, Object> attributes) {
         String query = request.getURI().getRawQuery();
         String ticketText = query.substring(11);
-        System.out.println(ticketText);
         Ticket ticket = ticketRepository.findByText(ticketText).orElseThrow();
-        ticketRepository.delete(ticket);
         return new UserPrincipal(Long.toString(ticket.getUser().getId()));
     }
 

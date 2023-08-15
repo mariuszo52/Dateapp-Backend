@@ -10,8 +10,7 @@ import com.dateapp.dateapp.userInfo.UserInfoMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -26,12 +25,6 @@ public class MatchService {
         this.matchRepository = matchRepository;
         this.userRepository = userRepository;
     }
-    public Optional<MatchDto> getMatchById(long id){
-        return matchRepository.findById(id)
-                .map(matchMapper::map);
-
-    }
-
     public void saveMatch(MatchDto matchDto, Chat chat) {
         matchDto.setChatId(chat.getId());
         Match match = matchMapper.map(matchDto);
@@ -66,13 +59,14 @@ public class MatchService {
         return user2Likes.contains(rightSwipedProfile.getUserId());
     }
 
-    public List<UserInfoDto> getAllUserMatchesInfo(Long userId) {
+    public ArrayList<UserInfoDto> getAllUserMatchesInfo(Long userId) {
         return matchRepository.findAllByUser_Id(userId).stream()
                 .filter(match -> match.getMatched().equals(true))
+                .sorted(Comparator.comparing(Match::getMatchDate).reversed())
                 .map(Match::getMatchedUser)
                 .map(User::getUserInfo)
                 .map(UserInfoMapper::map)
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(ArrayList::new));
 
 
     }

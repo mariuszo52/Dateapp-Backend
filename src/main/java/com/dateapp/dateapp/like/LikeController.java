@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -29,7 +30,7 @@ public class LikeController {
     ResponseEntity<?> getAllUserReceivedLikes(@RequestParam long userId){
         try {
             checkDataAccessPermission(userId);
-            List<UserInfoDto> allUserReceivedLikes = likeService.getAllUserReceivedLikes(userId);
+            ArrayList<UserInfoDto> allUserReceivedLikes = likeService.getAllUserReceivedLikes(userId);
             return ResponseEntity.ok(allUserReceivedLikes);
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());

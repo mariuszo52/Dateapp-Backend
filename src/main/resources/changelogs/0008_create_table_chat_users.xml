@@ -15,6 +15,7 @@
             <column name="user_id" type="BIGINT">
                 <constraints foreignKeyName="fk_user5" referencedTableName="users" referencedColumnNames="id"/>
             </column>
+            <column name="notifications" type="BIGINT" defaultOnNull="true" defaultValue="0"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

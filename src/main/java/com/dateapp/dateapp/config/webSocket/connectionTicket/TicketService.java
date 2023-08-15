@@ -3,9 +3,11 @@ package com.dateapp.dateapp.config.webSocket.connectionTicket;
 import com.dateapp.dateapp.exceptions.user.UserNotFoundException;
 import com.dateapp.dateapp.user.User;
 import com.dateapp.dateapp.user.UserRepository;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -20,6 +22,7 @@ public class TicketService {
         this.userRepository = userRepository;
         this.ticketRepository = ticketRepository;
     }
+
 
     public TicketDto generateTicket(Long userId){
         SecureRandom secureRandom = new SecureRandom();

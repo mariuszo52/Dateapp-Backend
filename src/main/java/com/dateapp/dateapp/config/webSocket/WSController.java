@@ -36,6 +36,9 @@ public class WSController {
             messageService.checkDurationMessage(message);
             webSocketService.notifyFrontend(message);
             messageService.save(message);
+            /*
+            userToSend set
+             */
             return ResponseEntity.ok().body(MESSAGE_SENT);
         } catch (MessageException | ChatNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
