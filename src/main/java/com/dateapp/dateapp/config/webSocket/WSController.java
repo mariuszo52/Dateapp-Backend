@@ -1,6 +1,5 @@
 package com.dateapp.dateapp.config.webSocket;
 
-import com.dateapp.dateapp.config.webSocket.connectionTicket.Ticket;
 import com.dateapp.dateapp.config.webSocket.connectionTicket.TicketDto;
 import com.dateapp.dateapp.config.webSocket.connectionTicket.TicketService;
 import com.dateapp.dateapp.exceptions.UnauthorizedResourceAccessException;
@@ -12,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.stream.StreamSupport;
 
 @CrossOrigin
 @RestController
@@ -36,9 +33,6 @@ public class WSController {
             messageService.checkDurationMessage(message);
             webSocketService.notifyFrontend(message);
             messageService.save(message);
-            /*
-            userToSend set
-             */
             return ResponseEntity.ok().body(MESSAGE_SENT);
         } catch (MessageException | ChatNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -62,8 +56,6 @@ public class WSController {
         }
 
     }
-
-
     @MessageMapping("/chat")
     public MessageDto getMessage(MessageDto message) {
         return message;

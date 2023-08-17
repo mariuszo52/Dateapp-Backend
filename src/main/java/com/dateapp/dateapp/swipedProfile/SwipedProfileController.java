@@ -1,17 +1,15 @@
 package com.dateapp.dateapp.swipedProfile;
 
 import com.dateapp.dateapp.chat.Chat;
-import com.dateapp.dateapp.chat.ChatDto;
 import com.dateapp.dateapp.chat.ChatService;
-import com.dateapp.dateapp.config.security.EndpointAccessCheckService;
-import com.dateapp.dateapp.match.Match;
 import com.dateapp.dateapp.match.MatchDto;
 import com.dateapp.dateapp.match.MatchService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import static com.dateapp.dateapp.config.security.EndpointAccessCheckService.checkDataAccessPermission;
 import static com.dateapp.dateapp.swipedProfile.SwipedProfileService.LEFT_SWIPE;
@@ -37,7 +35,8 @@ class SwipedProfileController {
             if (matchService.checkMatch(leftSwipedProfile, RIGHT_SWIPE)) {
                 MatchDto matchDto = createMatchDto(leftSwipedProfile, false);
                 matchService.saveMissMatch(matchDto);
-                swipedProfileService.deleteMatchedLikes(leftSwipedProfile.getUserId(), leftSwipedProfile.getSwipedProfileId());
+                swipedProfileService.deleteMatchedLikes(leftSwipedProfile.getUserId(),
+                        leftSwipedProfile.getSwipedProfileId());
 
             } else {
                 swipedProfileService.saveLeftSwipe(leftSwipedProfile);

@@ -4,16 +4,14 @@ import com.dateapp.dateapp.chat.ChatDto;
 import com.dateapp.dateapp.chat.ChatService;
 import com.dateapp.dateapp.chat.ChatUser;
 import com.dateapp.dateapp.chat.ChatUserService;
-import com.dateapp.dateapp.config.security.EndpointAccessCheckService;
 import com.dateapp.dateapp.exceptions.UnauthorizedResourceAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 import java.util.Set;
 
-import static com.dateapp.dateapp.config.security.EndpointAccessCheckService.*;
+import static com.dateapp.dateapp.config.security.LoggedUserService.getLoggedUserId;
 
 @CrossOrigin
 @RestController
@@ -28,21 +26,24 @@ public class MessageController {
         this.chatService = chatService;
     }
 
-    @GetMapping("/chat-messages")
+    @GetMapping("/messages")
     public ResponseEntity<?> getChatMessages(@RequestParam Long chatId) {
         try {
             messageService.checkAccessToGetMessages(chatId);
             Set<MessageDto> chatMessages = messageService.getChatMessages(chatId);
             return ResponseEntity.ok().body(chatMessages);
-        } catch (RuntimeException e) {
+        } catch (UnauthorizedResourceAccessException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
 
     }
+
     @PutMapping("/notifications-counter")
-    public ResponseEntity<String> updateCounter(@RequestParam Long userId, @RequestParam Long chatId) {
+    public ResponseEntity<String> updateCounter(@RequestParam Long chatId) {
         try {
-            checkDataAccessPermission(userId);
+            long userId = getLoggedUserId();
             ChatDto chat = chatService.findChatById(chatId);
             Long notificationReceiverId = chat.getParticipantsIds().stream()
                     .filter(id -> !id.equals(userId))
@@ -50,55 +51,42 @@ public class MessageController {
             ChatUser chatUser = chatUserService.getChatUserEntityByUserIdAndChatId(notificationReceiverId, chatId);
             chatUserService.updateNotificationCounter(chatUser);
             return ResponseEntity.status(HttpStatus.CREATED).build();
-        }catch (UnauthorizedResourceAccessException e){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @GetMapping("/notifications-counter")
-    public ResponseEntity<?> getUserChatNotificationCounter(@RequestParam Long userId, @RequestParam Long chatId) {
+    public ResponseEntity<?> getUserChatNotificationCounter(@RequestParam Long chatId) {
         try {
-            checkDataAccessPermission(userId);
+            long userId = getLoggedUserId();
             return ResponseEntity.ok(chatUserService.getUserChatNotificationCounter(userId, chatId));
-        }catch (UnauthorizedResourceAccessException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @GetMapping("/unread-chats")
-    public ResponseEntity<?> getUserUnreadChats(@RequestParam Long userId) {
+    public ResponseEntity<?> getUserUnreadChats() {
         try {
-            checkDataAccessPermission(userId);
+            long userId = getLoggedUserId();
             return ResponseEntity.ok(chatUserService.checkUserUnreadChats(userId));
-        }catch (UnauthorizedResourceAccessException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
 
     @PutMapping("/notifications-counter-reset")
-    public ResponseEntity<String> resetUnreadMessagesCounter(@RequestParam Long userId, @RequestParam Long chatId) {
+    public ResponseEntity<String> resetUnreadMessagesCounter(@RequestParam Long chatId) {
         try {
-            checkDataAccessPermission(userId);
+            long userId = getLoggedUserId();
             chatUserService.resetUnreadMessagesCounter(userId, chatId);
             return ResponseEntity.status(HttpStatus.CREATED).build();
-        }catch (UnauthorizedResourceAccessException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-
-
-
-
 
 
 }
