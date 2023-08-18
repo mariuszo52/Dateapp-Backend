@@ -1,6 +1,8 @@
 package com.dateapp.dateapp.login;
 
 
+import com.dateapp.dateapp.config.security.EndpointAccessCheckService;
+import com.dateapp.dateapp.config.security.LoggedUserService;
 import com.dateapp.dateapp.jwtToken.JwtTokenService;
 import com.dateapp.dateapp.user.UserRegisterDto;
 import com.dateapp.dateapp.user.UserService;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.Map;
 
+import static com.dateapp.dateapp.config.security.EndpointAccessCheckService.checkDataAccessPermission;
+
 @RestController
 @CrossOrigin
 public class LoginController {
@@ -31,14 +35,25 @@ public class LoginController {
         this.daoAuthenticationProvider = daoAuthenticationProvider;
         this.userInfoService = userInfoService;
     }
-    @GetMapping("/userinfo")
-    ResponseEntity<UserInfoDto> getUserInfo(@RequestParam Long userId){
+    @GetMapping("/user-info")
+    ResponseEntity<UserInfoDto> getUserInfo(@RequestParam Long userId) {
         try {
+            checkDataAccessPermission(userId);
             UserInfoDto userInfoDto = userInfoService.getUserInfoByUserId(userId).orElseThrow();
             return ResponseEntity.ok().body(userInfoDto);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();
         }
+    }
+        @GetMapping("/matched-user-info")
+        ResponseEntity<UserInfoDto> getMatchedUserInfo(@RequestParam Long userId){
+            try {
+                //przekazac match i sprawdzic czy user nalezy do maczu
+                UserInfoDto userInfoDto = userInfoService.getUserInfoByUserId(userId).orElseThrow();
+                return ResponseEntity.ok().body(userInfoDto);
+            }catch (RuntimeException e){
+                return ResponseEntity.badRequest().build();
+            }
 
     }
     @PostMapping("/userinfo")

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.dateapp.dateapp.config.security.EndpointAccessCheckService.checkDataAccessPermission;
 import static com.dateapp.dateapp.swipedProfile.SwipedProfileService.LEFT_SWIPE;
 import static com.dateapp.dateapp.swipedProfile.SwipedProfileService.RIGHT_SWIPE;
 
@@ -31,7 +30,6 @@ class SwipedProfileController {
     @PostMapping("/swipe-left")
     ResponseEntity<String> addLeftSwipedProfile(@RequestBody SwipedProfileDto leftSwipedProfile) {
         try {
-            checkDataAccessPermission(leftSwipedProfile.getUserId());
             if (matchService.checkMatch(leftSwipedProfile, RIGHT_SWIPE)) {
                 MatchDto matchDto = createMatchDto(leftSwipedProfile, false);
                 matchService.saveMissMatch(matchDto);
@@ -50,7 +48,6 @@ class SwipedProfileController {
     @PostMapping("/swipe-right")
     ResponseEntity<String> addRightSwipedProfile(@RequestBody SwipedProfileDto rightSwipedProfile) {
         try {
-            checkDataAccessPermission(rightSwipedProfile.getUserId());
             if (matchService.checkMatch(rightSwipedProfile, LEFT_SWIPE)) {
                 MatchDto matchDto = createMatchDto(rightSwipedProfile, false);
                 matchService.saveMissMatch(matchDto);
