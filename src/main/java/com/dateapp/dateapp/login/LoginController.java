@@ -8,7 +8,10 @@ import com.dateapp.dateapp.user.UserRegisterDto;
 import com.dateapp.dateapp.user.UserService;
 import com.dateapp.dateapp.userInfo.UserInfoDto;
 import com.dateapp.dateapp.userInfo.UserInfoService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.security.auth.UserPrincipal;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +19,9 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.*;
 import java.security.Principal;
 import java.util.Map;
 
@@ -66,7 +72,7 @@ public class LoginController {
         }
     }
     @PostMapping("/login")
-    ResponseEntity<?> login(@RequestBody UserRegisterDto userRegisterDto) {
+    ResponseEntity<?> login(@RequestBody UserRegisterDto userRegisterDto) throws IOException, URISyntaxException {
         try {
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userRegisterDto.getEmail(), userRegisterDto.getPassword());
             String username = authentication.getName();

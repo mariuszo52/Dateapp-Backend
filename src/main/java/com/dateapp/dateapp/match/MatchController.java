@@ -24,8 +24,7 @@ class MatchController {
     @GetMapping("/all-matches")
     ResponseEntity<?> getAllUserMatches() {
         try {
-            long userId = getLoggedUserId();
-            ArrayList<UserInfoDto> allUserMatchesInfo = matchService.getAllUserMatchesInfo(userId);
+            ArrayList<UserInfoDto> allUserMatchesInfo = matchService.getAllUserMatchesInfo(getLoggedUserId());
             return ResponseEntity.ok(allUserMatchesInfo);
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
