@@ -1,9 +1,7 @@
 package com.dateapp.dateapp.userInfo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.dateapp.dateapp.userInfo.location.Location;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -13,7 +11,9 @@ public class UserInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String firstName;
-    private String location;
+    @OneToOne
+    @JoinColumn(name = "location_id" )
+    private Location location;
     private LocalDate dateOfBirth;
     private String genderIdentity;
     private String genderInterest;
@@ -21,11 +21,11 @@ public class UserInfo {
     private String about;
     private Long userId;
 
-    public String getLocation() {
+    public Location getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 
@@ -95,5 +95,20 @@ public class UserInfo {
 
     public void setAbout(String about) {
         this.about = about;
+    }
+
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", location=" + location +
+                ", dateOfBirth=" + dateOfBirth +
+                ", genderIdentity='" + genderIdentity + '\'' +
+                ", genderInterest='" + genderInterest + '\'' +
+                ", url='" + url + '\'' +
+                ", about='" + about + '\'' +
+                ", userId=" + userId +
+                '}';
     }
 }

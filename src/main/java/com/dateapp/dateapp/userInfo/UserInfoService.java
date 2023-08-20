@@ -3,6 +3,8 @@ package com.dateapp.dateapp.userInfo;
 import com.dateapp.dateapp.exceptions.user.UserNotFoundException;
 import com.dateapp.dateapp.user.User;
 import com.dateapp.dateapp.user.UserRepository;
+import com.dateapp.dateapp.userInfo.location.Location;
+import com.dateapp.dateapp.userInfo.location.LocationRepository;
 import com.dateapp.dateapp.userInfo.userInfoEdit.UserInfoEditDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,15 +19,19 @@ import static com.dateapp.dateapp.userInfo.UserInfoMapper.map;
 public class UserInfoService {
     private final UserInfoRepository userInfoRepository;
     private final UserRepository userRepository;
+    private final LocationRepository locationRepository;
 
-    UserInfoService(UserInfoRepository userInfoRepository, UserRepository userRepository) {
+    UserInfoService(UserInfoRepository userInfoRepository, UserRepository userRepository, LocationRepository locationRepository) {
         this.userInfoRepository = userInfoRepository;
         this.userRepository = userRepository;
+        this.locationRepository = locationRepository;
     }
-
     @Transactional
     public void addUserInfo(UserInfoDto userInfoDto) {
-        UserInfo userInfo = userInfoRepository.save(map(userInfoDto));
+        UserInfo userInfo1 = map(userInfoDto);
+
+        UserInfo userInfo = userInfoRepository.save(userInfo1);
+
         User user = userRepository.findById(userInfoDto.getUserId()).orElseThrow(UserNotFoundException::new);
         user.setUserInfo(userInfo);
     }
@@ -39,7 +45,7 @@ public class UserInfoService {
         User user = userRepository.findById(getLoggedUserId()).orElseThrow(UserNotFoundException::new);
         UserInfo userInfo = user.getUserInfo();
         userInfo.setFirstName(userInfoEditDto.getFirstName());
-        userInfo.setLocation(userInfoEditDto.getLocation());
+///////////////////////////////////
         LocalDate dateOfBirth = LocalDate.of(userInfoEditDto.getYearOfBirth(),
                 userInfoEditDto.getMonthOfBirth(),
                 userInfoEditDto.getDayOfBirth());

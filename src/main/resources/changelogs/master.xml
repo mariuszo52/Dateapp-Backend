@@ -13,5 +13,7 @@
     <include file="0007_create_table_message.xml" relativeToChangelogFile="true"/>
     <include file="0008_create_table_chat_users.xml" relativeToChangelogFile="true"/>
     <include file="0009_create_table_ticket.xml" relativeToChangelogFile="true"/>
+    <include file="0010create_table_location.xml" relativeToChangelogFile="true"/>
+    <include file="0011_add_location_foreign_key_to_table_userinfo.xml" relativeToChangelogFile="true"/>
     <include file="changelogs/data/data.sql"/>
 </databaseChangeLog>

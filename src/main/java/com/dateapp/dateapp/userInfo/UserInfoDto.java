@@ -1,5 +1,7 @@
 package com.dateapp.dateapp.userInfo;
 
+import com.dateapp.dateapp.userInfo.location.LocationDto;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -10,19 +12,19 @@ public class UserInfoDto {
     private int dayOfBirth;
     private int monthOfBirth;
     private int yearOfBirth;
-    private String location;
+    private LocationDto locationDto;
     private String genderIdentity;
     private String genderInterest;
     private String url;
     private String about;
     private long userId;
 
-    public String getLocation() {
-        return location;
+    public LocationDto getLocationDto() {
+        return locationDto;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setLocationDto(LocationDto locationDto) {
+        this.locationDto = locationDto;
     }
 
     public void setAge(int age) {

@@ -1,28 +1,19 @@
 package com.dateapp.dateapp.login;
 
 
-import com.dateapp.dateapp.config.security.EndpointAccessCheckService;
-import com.dateapp.dateapp.config.security.LoggedUserService;
 import com.dateapp.dateapp.jwtToken.JwtTokenService;
 import com.dateapp.dateapp.user.UserRegisterDto;
 import com.dateapp.dateapp.user.UserService;
 import com.dateapp.dateapp.userInfo.UserInfoDto;
 import com.dateapp.dateapp.userInfo.UserInfoService;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.security.auth.UserPrincipal;
-import org.springframework.http.HttpMethod;
+import com.dateapp.dateapp.userInfo.location.LocationDto;
+import com.dateapp.dateapp.userInfo.location.LocationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.*;
-import java.security.Principal;
 import java.util.Map;
 
 import static com.dateapp.dateapp.config.security.EndpointAccessCheckService.checkDataAccessPermission;
@@ -34,12 +25,14 @@ public class LoginController {
     private final JwtTokenService jwtTokenService;
     private final DaoAuthenticationProvider daoAuthenticationProvider;
     private final UserInfoService userInfoService;
+    private final LocationService locationService;
 
-    public LoginController(UserService userService, JwtTokenService jwtTokenService, DaoAuthenticationProvider daoAuthenticationProvider, UserInfoService userInfoService) {
+    public LoginController(UserService userService, JwtTokenService jwtTokenService, DaoAuthenticationProvider daoAuthenticationProvider, UserInfoService userInfoService, LocationService locationService) {
         this.userService = userService;
         this.jwtTokenService = jwtTokenService;
         this.daoAuthenticationProvider = daoAuthenticationProvider;
         this.userInfoService = userInfoService;
+        this.locationService = locationService;
     }
     @GetMapping("/user-info")
     ResponseEntity<UserInfoDto> getUserInfo(@RequestParam Long userId) {
@@ -65,6 +58,8 @@ public class LoginController {
     @PostMapping("/userinfo")
     ResponseEntity<String> addUserInfo(@RequestBody UserInfoDto userInfoDto){
         try{
+            LocationDto locationDto = locationService.save(userInfoDto.getLocationDto()).orElseThrow();
+            userInfoDto.setLocationDto(locationDto);
             userInfoService.addUserInfo(userInfoDto);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }catch (RuntimeException e){
@@ -72,7 +67,7 @@ public class LoginController {
         }
     }
     @PostMapping("/login")
-    ResponseEntity<?> login(@RequestBody UserRegisterDto userRegisterDto) throws IOException, URISyntaxException {
+    ResponseEntity<?> login(@RequestBody UserRegisterDto userRegisterDto) {
         try {
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userRegisterDto.getEmail(), userRegisterDto.getPassword());
             String username = authentication.getName();

@@ -4,6 +4,7 @@ import com.dateapp.dateapp.exceptions.user.UserNotFoundException;
 import com.dateapp.dateapp.swipedProfile.SwipedProfile;
 import com.dateapp.dateapp.user.User;
 import com.dateapp.dateapp.user.UserRepository;
+import com.dateapp.dateapp.userInfo.location.LocationService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,12 +14,14 @@ import java.util.stream.Collectors;
 @Service
 public class SwipeService {
     private final UserRepository userRepository;
+    private final LocationService locationService;
 
-    SwipeService(UserRepository userRepository) {
+    SwipeService(UserRepository userRepository, LocationService locationService) {
         this.userRepository = userRepository;
+        this.locationService = locationService;
     }
 
-    Set<SwipeCardDto> getUsersToSwipe(long userId) {
+    Set<SwipeCardDto> getUsersToSwipe(long userId, double distance) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         List<Long> matchedUsers = user.getMatches().stream()
                 .map(match -> match.getMatchedUser().getId())
@@ -28,9 +31,21 @@ public class SwipeService {
                 .toList();
 
         return userRepository.findAllByUserInfo_GenderIdentity(user.getUserInfo().getGenderInterest()).stream()
-                .filter(user1 -> !matchedUsers.contains(user1.getId()))
-                .filter(user1 -> !usersSwiped.contains(user1))
+                .filter(userToSwipe -> !matchedUsers.contains(userToSwipe.getId()))
+                .filter(userToSwipe -> !usersSwiped.contains(userToSwipe))
+                .filter(userToSwipe -> filterUsersByDistance(user, userToSwipe, distance))
                 .map(SwipeCardMapper::map)
                 .collect(Collectors.toSet());
     }
+    private boolean filterUsersByDistance(User user, User userToSwipe, double distance){
+        Double userLatitude = user.getUserInfo().getLocation().getLatitude();
+        Double userLongitude = user.getUserInfo().getLocation().getLongitude();
+        Double userToSwipeLatitude = userToSwipe.getUserInfo().getLocation().getLatitude();
+        Double userToSwipeLongitude = userToSwipe.getUserInfo().getLocation().getLongitude();
+        double distanceBetweenUsers = locationService.calculateDistanceInMetersBetweenUsers
+                (userLatitude, userLongitude, userToSwipeLatitude, userToSwipeLongitude);
+        return distanceBetweenUsers <= distance;
+    }
+
 }
+

@@ -1,5 +1,7 @@
 package com.dateapp.dateapp.userInfo;
 
+import com.dateapp.dateapp.userInfo.location.LocationMapper;
+
 import java.time.LocalDate;
 
 public class UserInfoMapper {
@@ -9,12 +11,13 @@ public class UserInfoMapper {
                 userInfoDto.getMonthOfBirth(), userInfoDto.getDayOfBirth());
         userInfo.setDateOfBirth(dateOfBirth);
         userInfo.setFirstName(userInfoDto.getFirstName());
-        userInfo.setLocation(userInfoDto.getLocation());
         userInfo.setGenderIdentity(userInfoDto.getGenderIdentity());
+        userInfo.setLocation(LocationMapper.map(userInfoDto.getLocationDto()));
         userInfo.setGenderInterest(userInfoDto.getGenderInterest());
         userInfo.setUrl(userInfoDto.getUrl());
         userInfo.setAbout(userInfoDto.getAbout());
         userInfo.setUserId(userInfoDto.getUserId());
+
         return userInfo;
     }
 
@@ -25,7 +28,7 @@ public class UserInfoMapper {
         userInfoDto.setDayOfBirth(userInfo.getDateOfBirth().getDayOfMonth());
         userInfoDto.setMonthOfBirth(userInfo.getDateOfBirth().getMonthValue());
         userInfoDto.setYearOfBirth(userInfo.getDateOfBirth().getYear());
-        userInfoDto.setLocation(userInfo.getLocation());
+        userInfoDto.setLocationDto(LocationMapper.map(userInfo.getLocation()));
         userInfoDto.setGenderIdentity(userInfo.getGenderIdentity());
         userInfoDto.setGenderInterest(userInfo.getGenderInterest());
         userInfoDto.setUrl(userInfo.getUrl());

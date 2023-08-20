@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
@@ -20,10 +21,10 @@ public class SwipeController {
     }
 
     @GetMapping("/get-swipe-users")
-    ResponseEntity<?> getUsersToSwipe() {
+    ResponseEntity<?> getUsersToSwipe(@RequestParam double distance) {
         try {
             long userId = getLoggedUserId();
-            Set<SwipeCardDto> usersToSwipe = swipeService.getUsersToSwipe(userId);
+            Set<SwipeCardDto> usersToSwipe = swipeService.getUsersToSwipe(userId, distance);
             return ResponseEntity.ok(usersToSwipe);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());

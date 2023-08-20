@@ -5,7 +5,9 @@ public class UserInfoEditDto {
     private int dayOfBirth;
     private int monthOfBirth;
     private int yearOfBirth;
-    private String location;
+    private String locationName;
+    private Double locationLatitude;
+    private Double locationLongitude;
     private String url;
     private String about;
 
@@ -41,12 +43,28 @@ public class UserInfoEditDto {
         this.yearOfBirth = yearOfBirth;
     }
 
-    public String getLocation() {
-        return location;
+    public String getLocationName() {
+        return locationName;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
+
+    public Double getLocationLatitude() {
+        return locationLatitude;
+    }
+
+    public void setLocationLatitude(Double locationLatitude) {
+        this.locationLatitude = locationLatitude;
+    }
+
+    public Double getLocationLongitude() {
+        return locationLongitude;
+    }
+
+    public void setLocationLongitude(Double locationLongitude) {
+        this.locationLongitude = locationLongitude;
     }
 
     public String getUrl() {
@@ -65,16 +83,4 @@ public class UserInfoEditDto {
         this.about = about;
     }
 
-    @Override
-    public String toString() {
-        return "UserInfoEditDto{" +
-                "firstName='" + firstName + '\'' +
-                ", dayOfBirth=" + dayOfBirth +
-                ", monthOfBirth=" + monthOfBirth +
-                ", yearOfBirth=" + yearOfBirth +
-                ", location='" + location + '\'' +
-                ", url='" + url + '\'' +
-                ", about='" + about + '\'' +
-                '}';
-    }
 }
