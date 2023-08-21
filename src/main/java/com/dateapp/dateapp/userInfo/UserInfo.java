@@ -19,10 +19,19 @@ public class UserInfo {
     private String genderInterest;
     private String url;
     private String about;
+    private Double maxDistance;
     private Long userId;
 
     public Location getLocation() {
         return location;
+    }
+
+    public Double getMaxDistance() {
+        return maxDistance;
+    }
+
+    public void setMaxDistance(Double maxDistance) {
+        this.maxDistance = maxDistance;
     }
 
     public void setLocation(Location location) {

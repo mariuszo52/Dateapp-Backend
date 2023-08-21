@@ -16,6 +16,7 @@ public class UserInfoMapper {
         userInfo.setGenderInterest(userInfoDto.getGenderInterest());
         userInfo.setUrl(userInfoDto.getUrl());
         userInfo.setAbout(userInfoDto.getAbout());
+        userInfo.setMaxDistance(userInfoDto.getMaxDistance());
         userInfo.setUserId(userInfoDto.getUserId());
 
         return userInfo;
@@ -33,6 +34,7 @@ public class UserInfoMapper {
         userInfoDto.setGenderInterest(userInfo.getGenderInterest());
         userInfoDto.setUrl(userInfo.getUrl());
         userInfoDto.setAbout(userInfo.getAbout());
+        userInfoDto.setMaxDistance(userInfo.getMaxDistance());
         userInfoDto.setUserId(userInfo.getUserId());
         userInfoDto.setAge();
         return userInfoDto;

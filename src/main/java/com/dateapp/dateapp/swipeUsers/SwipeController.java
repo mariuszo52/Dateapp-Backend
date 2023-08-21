@@ -23,8 +23,7 @@ public class SwipeController {
     @GetMapping("/get-swipe-users")
     ResponseEntity<?> getUsersToSwipe(@RequestParam double distance) {
         try {
-            long userId = getLoggedUserId();
-            Set<SwipeCardDto> usersToSwipe = swipeService.getUsersToSwipe(userId, distance);
+            Set<SwipeCardDto> usersToSwipe = swipeService.getUsersToSwipe(getLoggedUserId(), distance);
             return ResponseEntity.ok(usersToSwipe);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());

@@ -44,7 +44,7 @@ public class SwipeService {
         Double userToSwipeLongitude = userToSwipe.getUserInfo().getLocation().getLongitude();
         double distanceBetweenUsers = locationService.calculateDistanceInMetersBetweenUsers
                 (userLatitude, userLongitude, userToSwipeLatitude, userToSwipeLongitude);
-        return distanceBetweenUsers <= distance;
+        return distanceBetweenUsers <= distance * 1000;
     }
 
 }
