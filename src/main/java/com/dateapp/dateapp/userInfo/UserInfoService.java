@@ -19,19 +19,20 @@ import static com.dateapp.dateapp.userInfo.UserInfoMapper.map;
 public class UserInfoService {
     private final UserInfoRepository userInfoRepository;
     private final UserRepository userRepository;
-    private final LocationRepository locationRepository;
 
-    UserInfoService(UserInfoRepository userInfoRepository, UserRepository userRepository, LocationRepository locationRepository) {
+    UserInfoService(UserInfoRepository userInfoRepository, UserRepository userRepository) {
         this.userInfoRepository = userInfoRepository;
         this.userRepository = userRepository;
-        this.locationRepository = locationRepository;
     }
+    public Optional<UserInfoDto> getLoggedUserInfo(){
+        User user = userRepository.findById(getLoggedUserId()).orElseThrow(UserNotFoundException::new);
+        return Optional.of(UserInfoMapper.map(user.getUserInfo()));
+    }
+
     @Transactional
     public void addUserInfo(UserInfoDto userInfoDto) {
         UserInfo userInfo1 = map(userInfoDto);
-
         UserInfo userInfo = userInfoRepository.save(userInfo1);
-
         User user = userRepository.findById(userInfoDto.getUserId()).orElseThrow(UserNotFoundException::new);
         user.setUserInfo(userInfo);
     }

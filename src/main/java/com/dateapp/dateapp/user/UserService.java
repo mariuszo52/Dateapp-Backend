@@ -1,5 +1,10 @@
 package com.dateapp.dateapp.user;
 
+import com.dateapp.dateapp.config.security.LoggedUserService;
+import com.dateapp.dateapp.exceptions.user.UserNotFoundException;
+import com.dateapp.dateapp.userInfo.UserInfo;
+import com.dateapp.dateapp.userInfo.UserInfoDto;
+import com.dateapp.dateapp.userInfo.UserInfoMapper;
 import com.dateapp.dateapp.userRole.UserRole;
 import com.dateapp.dateapp.userRole.UserRoleRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import static com.dateapp.dateapp.config.security.LoggedUserService.getLoggedUserId;
 
 @Service
 public class UserService {
@@ -22,12 +29,7 @@ public class UserService {
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
     }
-    public Optional<User> findUserById(long id){
-        return userRepository.findById(id);
-    }
-    public Optional<User> findUserByEmail(String email){
-       return userRepository.findByEmail(email);
-    }
+
     @Transactional
     public Long registerUser(UserRegisterDto userRegisterDto) {
         List<String> allUsers = StreamSupport.stream(userRepository.findAll().spliterator(), false)

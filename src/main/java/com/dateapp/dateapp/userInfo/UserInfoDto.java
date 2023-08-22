@@ -18,6 +18,7 @@ public class UserInfoDto {
     private String url;
     private String about;
     private Double maxDistance;
+    private Long userId;
 
     public Double getMaxDistance() {
         return maxDistance;
@@ -27,7 +28,6 @@ public class UserInfoDto {
         this.maxDistance = maxDistance;
     }
 
-    private long userId;
 
     public LocationDto getLocationDto() {
         return locationDto;

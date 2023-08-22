@@ -67,16 +67,12 @@ public class LoginController {
         }
     }
     @PostMapping("/login")
-    ResponseEntity<?> login(@RequestBody UserRegisterDto userRegisterDto) {
+    ResponseEntity<String> login(@RequestBody UserRegisterDto userRegisterDto) {
         try {
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userRegisterDto.getEmail(), userRegisterDto.getPassword());
-            String username = authentication.getName();
-            Long id = userService.findUserByEmail(username).orElseThrow().getId();
-            userRegisterDto.setId(id);
             daoAuthenticationProvider.authenticate(authentication);
             String jwtToken = jwtTokenService.generateJwtToken(userRegisterDto);
-            Map<String, String> map = Map.of("userId", String.valueOf(id),"jwt", jwtToken);
-            return ResponseEntity.ok(map);
+            return ResponseEntity.status(HttpStatus.CREATED).body(jwtToken);
         } catch (RuntimeException  e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
