@@ -34,7 +34,6 @@ public class UserInfoMapper {
         userInfoDto.setUrl(userInfo.getUrl());
         userInfoDto.setAbout(userInfo.getAbout());
         userInfoDto.setMaxDistance(userInfo.getMaxDistance());
-        userInfoDto.setUserId(userInfo.getUserId());
         userInfoDto.setAge();
         return userInfoDto;
     }

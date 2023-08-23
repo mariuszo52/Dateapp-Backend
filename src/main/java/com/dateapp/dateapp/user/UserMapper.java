@@ -18,7 +18,7 @@ public class UserMapper {
 
     public User map(UserRegisterDto userRegisterDto){
         User user = new User();
-        user.setId(user.getId());
+        user.setId(userRegisterDto.getId());
         user.setEmail(userRegisterDto.getEmail());
         user.setPassword(userRegisterDto.getPassword());
         UserRole userRole = userRoleRepository.findByName(userRegisterDto.getUserRole()).orElseThrow(RuntimeException::new);

@@ -18,7 +18,6 @@ public class UserInfoDto {
     private String url;
     private String about;
     private Double maxDistance;
-    private Long userId;
 
     public Double getMaxDistance() {
         return maxDistance;
@@ -48,14 +47,7 @@ public class UserInfoDto {
     public void setAge() {
         this.age = (int) ChronoUnit.YEARS.between(LocalDate.of(yearOfBirth, monthOfBirth, dayOfBirth), LocalDate.now());
     }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
+    
 
     public UserInfoDto() {
     }

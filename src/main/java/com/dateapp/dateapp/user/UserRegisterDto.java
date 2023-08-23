@@ -75,10 +75,12 @@ public class UserRegisterDto {
     @Override
     public String toString() {
         return "UserRegisterDto{" +
+                "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", confirmPassword='" + confirmPassword + '\'' +
                 ", userRole='" + userRole + '\'' +
+                ", userInfo=" + userInfo +
                 '}';
     }
 }
