@@ -29,12 +29,10 @@ public class UserInfoService {
         return Optional.of(UserInfoMapper.map(user.getUserInfo()));
     }
 
-    @Transactional
-    public void addUserInfo(UserInfoDto userInfoDto) {
-        UserInfo userInfo1 = map(userInfoDto);
-        UserInfo userInfo = userInfoRepository.save(userInfo1);
-        User user = userRepository.findById(userInfoDto.getUserId()).orElseThrow(UserNotFoundException::new);
-        user.setUserInfo(userInfo);
+    public Long save(UserInfoDto userInfoDto) {
+        UserInfo userInfo = userInfoRepository.save(map(userInfoDto));
+        return userInfo.getId();
+
     }
 
     public Optional<UserInfoDto> getUserInfoByUserId(long id){

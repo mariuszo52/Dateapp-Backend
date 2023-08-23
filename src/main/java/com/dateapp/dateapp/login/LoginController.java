@@ -60,7 +60,6 @@ public class LoginController {
         try{
             LocationDto locationDto = locationService.save(userInfoDto.getLocationDto()).orElseThrow();
             userInfoDto.setLocationDto(locationDto);
-            userInfoService.addUserInfo(userInfoDto);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }catch (RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -71,7 +70,10 @@ public class LoginController {
         try {
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userRegisterDto.getEmail(), userRegisterDto.getPassword());
             daoAuthenticationProvider.authenticate(authentication);
-            String jwtToken = jwtTokenService.generateJwtToken(userRegisterDto);
+            UserRegisterDto loggedUser = userService.findUserByEmail(userRegisterDto.getEmail());
+            System.out.println(userRegisterDto+ " podane do formularza d=logowania");
+            System.out.println("pobrane " + loggedUser );;
+            String jwtToken = jwtTokenService.generateJwtToken(loggedUser);
             return ResponseEntity.status(HttpStatus.CREATED).body(jwtToken);
         } catch (RuntimeException  e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -79,10 +81,16 @@ public class LoginController {
     }
 
     @PostMapping("/register")
-    ResponseEntity<String> register(@RequestBody UserRegisterDto userRegisterDto) {
+    ResponseEntity<?> register(@RequestBody UserRegisterDto userRegisterDto) {
         try{
-            Long id = userService.registerUser(userRegisterDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(id.toString());
+            System.out.println(userRegisterDto);
+            LocationDto locationDto = locationService.save(userRegisterDto.getUserInfo().getLocationDto()).orElseThrow();
+            userRegisterDto.getUserInfo().setLocationDto(locationDto);
+            Long userInfoId = userInfoService.save(userRegisterDto.getUserInfo());
+            userRegisterDto.getUserInfo().setId(userInfoId);
+            Long userId = userService.registerUser(userRegisterDto);
+            userRegisterDto.setId(userId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(userId);
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

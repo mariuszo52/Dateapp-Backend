@@ -27,8 +27,8 @@
             <column name="about" type="VARCHAR(1000)">
                 <constraints nullable="false"/>
             </column>
-            <column name="max_distance" type="DOUBLE">
-                <constraints nullable="false"/>
+            <column name="max_distance" type="DOUBLE" defaultOnNull="true" defaultValue="30.0">
+                <constraints nullable="true"/>
             </column>
             <column name="user_id" type="BIGINT">
                 <constraints nullable="true"/>

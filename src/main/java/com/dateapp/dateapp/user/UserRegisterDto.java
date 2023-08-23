@@ -1,11 +1,34 @@
 package com.dateapp.dateapp.user;
 
+import com.dateapp.dateapp.userInfo.UserInfo;
+import com.dateapp.dateapp.userInfo.UserInfoDto;
+
 public class UserRegisterDto {
     private Long id;
     private String email;
     private String password;
     private String confirmPassword;
     private String userRole;
+    private UserInfoDto userInfo;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public UserInfoDto getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfoDto userInfo) {
+        this.userInfo = userInfo;
+    }
+
+
+
 
     public String getUserRole() {
         return userRole;
@@ -24,13 +47,6 @@ public class UserRegisterDto {
         this.confirmPassword = confirmPassword;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getConfirmPassword() {
         return confirmPassword;
@@ -54,5 +70,15 @@ public class UserRegisterDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "UserRegisterDto{" +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", confirmPassword='" + confirmPassword + '\'' +
+                ", userRole='" + userRole + '\'' +
+                '}';
     }
 }
