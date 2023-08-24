@@ -5,7 +5,7 @@ import com.dateapp.dateapp.userInfo.location.LocationMapper;
 import java.time.LocalDate;
 
 public class UserInfoMapper {
-    static UserInfo map(UserInfoDto userInfoDto) {
+    public static UserInfo map(UserInfoDto userInfoDto) {
         UserInfo userInfo = new UserInfo();
         LocalDate dateOfBirth = LocalDate.of(userInfoDto.getYearOfBirth(),
                 userInfoDto.getMonthOfBirth(), userInfoDto.getDayOfBirth());

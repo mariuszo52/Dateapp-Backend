@@ -14,7 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 
 import static com.dateapp.dateapp.config.security.EndpointAccessCheckService.checkDataAccessPermission;
 
@@ -26,6 +25,7 @@ public class LoginController {
     private final DaoAuthenticationProvider daoAuthenticationProvider;
     private final UserInfoService userInfoService;
     private final LocationService locationService;
+    private static final double DEFAULT_DISTANCE = 50;
 
     public LoginController(UserService userService, JwtTokenService jwtTokenService, DaoAuthenticationProvider daoAuthenticationProvider, UserInfoService userInfoService, LocationService locationService) {
         this.userService = userService;
@@ -48,9 +48,12 @@ public class LoginController {
         ResponseEntity<UserInfoDto> getMatchedUserInfo(@RequestParam Long userId){
             try {
                 //przekazac match i sprawdzic czy user nalezy do maczu
-                UserInfoDto userInfoDto = userInfoService.getUserInfoByUserId(userId).orElseThrow();
-                return ResponseEntity.ok().body(userInfoDto);
+                UserRegisterDto user = userService.findUserById(userId);
+                UserInfoDto userInfo = user.getUserInfo();
+                System.out.println(userInfo);
+                return ResponseEntity.ok().body(userInfo);
             }catch (RuntimeException e){
+                System.out.println(e.getMessage());
                 return ResponseEntity.badRequest().build();
             }
 
@@ -74,23 +77,23 @@ public class LoginController {
             System.out.println(userRegisterDto+ " podane do formularza d=logowania");
             System.out.println("pobrane " + loggedUser );;
             String jwtToken = jwtTokenService.generateJwtToken(loggedUser);
-            return ResponseEntity.status(HttpStatus.CREATED).body(jwtToken);
+           return ResponseEntity.status(HttpStatus.CREATED).body(jwtToken);
         } catch (RuntimeException  e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @PostMapping("/register")
-    ResponseEntity<?> register(@RequestBody UserRegisterDto userRegisterDto) {
+    ResponseEntity<String> register(@RequestBody UserRegisterDto userRegisterDto) {
         try{
-            System.out.println(userRegisterDto);
             LocationDto locationDto = locationService.save(userRegisterDto.getUserInfo().getLocationDto()).orElseThrow();
             userRegisterDto.getUserInfo().setLocationDto(locationDto);
+            userRegisterDto.getUserInfo().setMaxDistance(DEFAULT_DISTANCE);
             Long userInfoId = userInfoService.save(userRegisterDto.getUserInfo());
             userRegisterDto.getUserInfo().setId(userInfoId);
             Long userId = userService.registerUser(userRegisterDto);
             userRegisterDto.setId(userId);
-            return ResponseEntity.status(HttpStatus.CREATED).body(userId);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

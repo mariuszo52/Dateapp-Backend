@@ -47,7 +47,7 @@ public class UserInfoDto {
     public void setAge() {
         this.age = (int) ChronoUnit.YEARS.between(LocalDate.of(yearOfBirth, monthOfBirth, dayOfBirth), LocalDate.now());
     }
-    
+
 
     public UserInfoDto() {
     }

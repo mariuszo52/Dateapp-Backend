@@ -52,7 +52,10 @@ public class UserService {
     }
    public UserRegisterDto findUserByEmail(String email){
         User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
-       System.out.println("user id po wyszukanie " + user.getId());
+        return UserMapper.map(user);
+    }
+    public UserRegisterDto findUserById(long id){
+        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         return UserMapper.map(user);
     }
 }
