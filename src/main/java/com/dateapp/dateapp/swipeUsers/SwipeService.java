@@ -1,5 +1,6 @@
 package com.dateapp.dateapp.swipeUsers;
 
+import com.dateapp.dateapp.config.security.LoggedUserService;
 import com.dateapp.dateapp.exceptions.user.UserNotFoundException;
 import com.dateapp.dateapp.swipedProfile.SwipedProfile;
 import com.dateapp.dateapp.user.User;
@@ -11,6 +12,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.dateapp.dateapp.config.security.LoggedUserService.getLoggedUserId;
+
 @Service
 public class SwipeService {
     private final UserRepository userRepository;
@@ -20,6 +23,7 @@ public class SwipeService {
         this.userRepository = userRepository;
         this.locationService = locationService;
     }
+
 
     Set<SwipeCardDto> getUsersToSwipe(long userId, double distance) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);

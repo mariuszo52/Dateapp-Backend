@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 
 @RestController
 @CrossOrigin
@@ -14,6 +16,12 @@ public class UserInfoController {
 
     public UserInfoController(UserInfoService userInfoService) {
         this.userInfoService = userInfoService;
+    }
+
+    @PutMapping("/distance")
+    public ResponseEntity<?> updateMaxDistance(@RequestParam Double distance) {
+        userInfoService.updateUserInfoMaxDistance(distance);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/user-info-edit")

@@ -6,6 +6,11 @@ import com.dateapp.dateapp.user.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static com.dateapp.dateapp.config.security.LoggedUserService.getLoggedUserId;
+
 @Service
 public class SwipedProfileService {
     public static final String LEFT_SWIPE = "LEFT";
@@ -37,6 +42,13 @@ public class SwipedProfileService {
         swipedProfileRepository.deleteSwipedProfileByUser_IdAndSwipedProfile_Id(user2Id, user1Id);
     }
 
+    Set<Long> getAllUserSwipedProfilesIds(){
+        User user = userRepository.findById(getLoggedUserId()).orElseThrow(UserNotFoundException::new);
+        return user.getSwipedProfiles().stream()
+                .map(SwipedProfileMapper::map)
+                .map(SwipedProfileDto::getSwipedProfileId)
+                .collect(Collectors.toSet());
+    }
 
     private static SwipedProfile createSwipedProfile(User user, User swipedUser, String swipeDirection) {
         SwipedProfile swipedProfile = new SwipedProfile();

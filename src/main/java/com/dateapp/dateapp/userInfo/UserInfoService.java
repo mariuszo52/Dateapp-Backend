@@ -1,5 +1,6 @@
 package com.dateapp.dateapp.userInfo;
 
+import com.dateapp.dateapp.config.security.LoggedUserService;
 import com.dateapp.dateapp.exceptions.user.UserNotFoundException;
 import com.dateapp.dateapp.user.User;
 import com.dateapp.dateapp.user.UserRepository;
@@ -38,6 +39,12 @@ public class UserInfoService {
     public Optional<UserInfoDto> getUserInfoByUserId(long id){
         return userInfoRepository.findByUserId(id)
                 .map(UserInfoMapper::map);
+    }
+    @Transactional
+    public void updateUserInfoMaxDistance(double distance){
+        long loggedUserId = getLoggedUserId();
+        User user = userRepository.findById(loggedUserId).orElseThrow(UserNotFoundException::new);
+        user.getUserInfo().setMaxDistance(distance);
     }
     @Transactional
     public UserInfoDto updateUserInfo(UserInfoEditDto userInfoEditDto){

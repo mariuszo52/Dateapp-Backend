@@ -6,10 +6,9 @@ import com.dateapp.dateapp.match.MatchDto;
 import com.dateapp.dateapp.match.MatchService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 import static com.dateapp.dateapp.swipedProfile.SwipedProfileService.LEFT_SWIPE;
 import static com.dateapp.dateapp.swipedProfile.SwipedProfileService.RIGHT_SWIPE;
@@ -25,6 +24,11 @@ class SwipedProfileController {
         this.swipedProfileService = swipedProfileService;
         this.matchService = matchService;
         this.chatService = chatService;
+    }
+    @GetMapping("/all-swiped-profiles")
+    ResponseEntity<?> getAllUserSwipedProfilesIds(){
+        Set<Long> allUserSwipedProfiles = swipedProfileService.getAllUserSwipedProfilesIds();
+        return ResponseEntity.ok().body(allUserSwipedProfiles);
     }
 
     @PostMapping("/swipe-left")
