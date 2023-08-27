@@ -8,8 +8,17 @@ public class UserInfoEditDto {
     private String locationName;
     private Double locationLatitude;
     private Double locationLongitude;
+    private String locationCountry;
     private String url;
     private String about;
+
+    public String getLocationCountry() {
+        return locationCountry;
+    }
+
+    public void setLocationCountry(String locationCountry) {
+        this.locationCountry = locationCountry;
+    }
 
     public String getFirstName() {
         return firstName;

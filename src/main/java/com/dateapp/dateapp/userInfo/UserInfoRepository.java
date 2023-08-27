@@ -6,5 +6,4 @@ import java.util.Optional;
 
 public interface UserInfoRepository extends CrudRepository<UserInfo, Long> {
 
-    Optional<UserInfo> findByUserId(Long userId);
 }

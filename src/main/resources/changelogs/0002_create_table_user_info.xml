@@ -30,9 +30,6 @@
             <column name="max_distance" type="DOUBLE" defaultOnNull="true" defaultValue="30.0">
                 <constraints nullable="true"/>
             </column>
-            <column name="user_id" type="BIGINT">
-                <constraints nullable="true"/>
-            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>

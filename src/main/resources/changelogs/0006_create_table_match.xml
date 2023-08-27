@@ -20,7 +20,7 @@
                 <constraints foreignKeyName="fk_user4" referencedTableName="users" referencedColumnNames="id"/>
             </column>
             <column name="chat_id" type="BIGINT">
-                <constraints referencedTableName="chat" referencedColumnNames="id" foreignKeyName="fk_chat3"/>
+                <constraints nullable="true" referencedTableName="chat" referencedColumnNames="id" foreignKeyName="fk_chat3"/>
             </column>
         </createTable>
     </changeSet>

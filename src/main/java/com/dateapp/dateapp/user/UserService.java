@@ -58,4 +58,6 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         return UserMapper.map(user);
     }
+
+
 }

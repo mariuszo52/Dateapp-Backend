@@ -26,8 +26,10 @@ public class MatchMapper {
         match.setUser(user);
         User matchedUser = userRepository.findById(matchDto.getMatchedUserId()).orElseThrow(UserNotFoundException::new);
         match.setMatchedUser(matchedUser);
-        Chat chat = chatRepository.findById(matchDto.getChatId()).orElseThrow();
-        match.setChat(chat);
+        if(matchDto.getChatId() != null) {
+            Chat chat = chatRepository.findById(matchDto.getChatId()).orElseThrow();
+            match.setChat(chat);
+        }
         match.setMatchDate(LocalDate.now());
         return match;
     }

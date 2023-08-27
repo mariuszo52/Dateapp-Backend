@@ -7,6 +7,7 @@ import java.time.LocalDate;
 public class UserInfoMapper {
     public static UserInfo map(UserInfoDto userInfoDto) {
         UserInfo userInfo = new UserInfo();
+        userInfo.setId(userInfoDto.getId());
         LocalDate dateOfBirth = LocalDate.of(userInfoDto.getYearOfBirth(),
                 userInfoDto.getMonthOfBirth(), userInfoDto.getDayOfBirth());
         userInfo.setDateOfBirth(dateOfBirth);

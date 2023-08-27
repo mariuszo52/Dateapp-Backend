@@ -20,7 +20,6 @@ public class UserInfo {
     private String url;
     private String about;
     private Double maxDistance;
-    private Long userId;
 
     public Location getLocation() {
         return location;
@@ -38,13 +37,6 @@ public class UserInfo {
         this.location = location;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 
     public UserInfo() {
     }
@@ -106,18 +98,4 @@ public class UserInfo {
         this.about = about;
     }
 
-    @Override
-    public String toString() {
-        return "UserInfo{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", location=" + location +
-                ", dateOfBirth=" + dateOfBirth +
-                ", genderIdentity='" + genderIdentity + '\'' +
-                ", genderInterest='" + genderInterest + '\'' +
-                ", url='" + url + '\'' +
-                ", about='" + about + '\'' +
-                ", userId=" + userId +
-                '}';
-    }
 }
