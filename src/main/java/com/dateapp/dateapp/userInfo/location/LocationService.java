@@ -14,11 +14,6 @@ import static org.apache.lucene.util.SloppyMath.haversinSortKey;
 
 @Service
 public class LocationService {
-    private final LocationRepository locationRepository;
-
-    public LocationService(LocationRepository locationRepository) {
-        this.locationRepository = locationRepository;
-    }
 
 
     public double calculateDistanceInMetersBetweenUsers(double user1Latitude, double user1Longitude, double user2Latitude, double user2Longitude) {
@@ -27,14 +22,4 @@ public class LocationService {
 
     }
 
-    @Transactional
-    public UserInfoDto addLocationToUserInfo(UserInfo userInfo) {
-        locationRepository.findByName(userInfo.getLocation().getName()).ifPresentOrElse(userInfo::setLocation, () -> {
-            Location location = new Location(userInfo.getLocation().getName(), userInfo.getLocation().getCountry(),
-                    userInfo.getLocation().getLatitude(), userInfo.getLocation().getLongitude());
-            locationRepository.save(location);
-            userInfo.setLocation(location);
-        });
-        return UserInfoMapper.map(userInfo);
-    }
 }

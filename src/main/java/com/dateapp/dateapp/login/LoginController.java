@@ -27,7 +27,6 @@ public class LoginController {
     private final DaoAuthenticationProvider daoAuthenticationProvider;
     private final UserInfoService userInfoService;
     private final LocationService locationService;
-    private static final double DEFAULT_DISTANCE = 50;
 
     public LoginController(UserService userService, JwtTokenService jwtTokenService, DaoAuthenticationProvider daoAuthenticationProvider, UserInfoService userInfoService, LocationService locationService) {
         this.userService = userService;
@@ -67,12 +66,7 @@ public class LoginController {
     @PostMapping("/register")
     ResponseEntity<String> register(@RequestBody UserRegisterDto userRegisterDto) {
         try{
-            userRegisterDto.getUserInfo().setMaxDistance(DEFAULT_DISTANCE);
-            UserInfoDto userInfoDto = locationService.addLocationToUserInfo(map(userRegisterDto.getUserInfo()));
-            UserInfoDto userInfo = userInfoService.save(userInfoDto);
-            userRegisterDto.setUserInfo(userInfo);
-            Long userId = userService.registerUser(userRegisterDto);
-            userRegisterDto.setId(userId);
+            userService.registerUser(userRegisterDto);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

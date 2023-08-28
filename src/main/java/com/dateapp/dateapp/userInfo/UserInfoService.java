@@ -51,13 +51,12 @@ public class UserInfoService {
     public UserInfoDto updateUserInfo(UserInfoEditDto userInfoEditDto) {
         User user = userRepository.findById(getLoggedUserId()).orElseThrow(UserNotFoundException::new);
         UserInfo userInfo = user.getUserInfo();
-        locationRepository.findByName(userInfoEditDto.getLocationName()).ifPresentOrElse(locationRepository::save, () -> {
+        locationRepository.findByName(userInfoEditDto.getLocationName()).ifPresentOrElse(userInfo::setLocation, () -> {
             Location location = new Location(userInfoEditDto.getLocationName(), userInfoEditDto.getLocationCountry(),
                     userInfoEditDto.getLocationLatitude(), userInfoEditDto.getLocationLongitude());
             locationRepository.save(location);
             userInfo.setLocation(location);
         });
-
         userInfo.setFirstName(userInfoEditDto.getFirstName());
         LocalDate dateOfBirth = LocalDate.of(userInfoEditDto.getYearOfBirth(), userInfoEditDto.getMonthOfBirth(), userInfoEditDto.getDayOfBirth());
         userInfo.setDateOfBirth(dateOfBirth);
