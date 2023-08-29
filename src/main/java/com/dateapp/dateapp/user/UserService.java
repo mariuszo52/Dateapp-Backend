@@ -1,5 +1,6 @@
 package com.dateapp.dateapp.user;
 
+import com.dateapp.dateapp.config.security.LoggedUserService;
 import com.dateapp.dateapp.exceptions.user.UserNotFoundException;
 import com.dateapp.dateapp.userInfo.UserInfo;
 import com.dateapp.dateapp.userInfo.UserInfoMapper;
@@ -15,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.StreamSupport;
 
+import static com.dateapp.dateapp.config.security.LoggedUserService.getLoggedUserId;
+
 @Service
 public class UserService {
     private static final double DEFAULT_DISTANCE = 50;
@@ -24,6 +27,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserInfoRepository userInfoRepository;
     private final LocationRepository locationRepository;
+
     public UserService(UserMapper userMapper, UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder, UserInfoRepository userInfoRepository, LocationRepository locationRepository) {
         this.userMapper = userMapper;
         this.userRepository = userRepository;
@@ -40,10 +44,9 @@ public class UserService {
                 .toList();
         if (allUsers.contains(userRegisterDto.getEmail())) {
             throw new RuntimeException("This email address is already taken");
-        }
-        else if (!userRegisterDto.getPassword().equals(userRegisterDto.getConfirmPassword())){
-           throw new RuntimeException("Passwords do not match.");
-        }else {
+        } else if (!userRegisterDto.getPassword().equals(userRegisterDto.getConfirmPassword())) {
+            throw new RuntimeException("Passwords do not match.");
+        } else {
             UserRole userRole = userRoleRepository.findByName("USER").orElseThrow(RuntimeException::new);
             userRegisterDto.setUserRole(userRole.getName());
             String encodedPass = passwordEncoder.encode(userRegisterDto.getPassword());
@@ -62,14 +65,36 @@ public class UserService {
             userRepository.save(user);
         }
     }
-   public UserRegisterDto findUserByEmail(String email){
+
+    public UserRegisterDto findUserByEmail(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
         return UserMapper.map(user);
     }
-    public UserRegisterDto findUserById(long id){
+
+    public UserRegisterDto findUserById(long id) {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         return UserMapper.map(user);
     }
 
+    @Transactional
+    public void changePassword(String oldPassword, String newPassword) {
+        User user = userRepository.findById(getLoggedUserId()).orElseThrow(UserNotFoundException::new);
+        boolean matches = passwordEncoder.matches(oldPassword, user.getPassword());
+        if (matches) {
+            user.setPassword(passwordEncoder.encode(newPassword));
+        } else {
+            throw new RuntimeException("Current password is incorrect.");
 
+        }
+    }
+
+    public void deleteAccount(String password) {
+        User user = userRepository.findById(getLoggedUserId()).orElseThrow(UserNotFoundException::new);
+        boolean matches = passwordEncoder.matches(password, user.getPassword());
+        if(matches){
+            userRepository.deleteById(user.getId());
+        }else {
+            throw new RuntimeException("Failed to delete user.");
+        }
+    }
 }
