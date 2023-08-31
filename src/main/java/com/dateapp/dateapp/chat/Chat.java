@@ -4,6 +4,7 @@ import com.dateapp.dateapp.match.Match;
 import com.dateapp.dateapp.message.Message;
 import com.dateapp.dateapp.user.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,7 +21,7 @@ public class Chat {
             joinColumns = @JoinColumn(name = "chat_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<User> participants = new ArrayList<>();
-    @OneToMany(mappedBy = "chat")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "chat")
     private Set<Message> messages = new HashSet<>();
     @OneToMany(mappedBy = "chat")
     private List<Match> match = new ArrayList<>();

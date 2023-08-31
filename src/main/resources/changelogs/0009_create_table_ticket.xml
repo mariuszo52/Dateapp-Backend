@@ -10,7 +10,6 @@
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
             <column name="text" type="VARCHAR(20)"/>
-            <column name="validity" type="boolean"/>
             <column name="user_id" type="BIGINT">
                 <constraints foreignKeyName="fk_user_id9" referencedTableName="users" referencedColumnNames="id"/>
             </column>

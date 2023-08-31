@@ -9,10 +9,18 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
-            <column name="name" type="VARCHAR(100)"/>
-            <column name="country" type="VARCHAR(5)"/>
-            <column name="latitude" type="DOUBLE"/>
-            <column name="longitude" type="DOUBLE"/>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country" type="VARCHAR(5)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="latitude" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="longitude" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>

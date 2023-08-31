@@ -64,7 +64,9 @@ public class JwtFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         System.out.println(path);
         return path.equals("/register") || path.equals("/login")
-                || path.equals("/userinfo") || path.startsWith("/chat") || path.startsWith("/h2-console");
+                || path.equals("/userinfo") || path.startsWith("/chat")
+                || path.startsWith("/h2-console") || path.startsWith("/v3/api-docs")
+                || path.startsWith("/swagger-ui");
     }
 
 }

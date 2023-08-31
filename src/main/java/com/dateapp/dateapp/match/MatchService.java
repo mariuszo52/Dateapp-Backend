@@ -69,7 +69,7 @@ public class MatchService {
         return matchRepository.findAllByUser_Id(userId).stream()
                 .filter(match -> match.getMatched().equals(true))
                 .sorted(Comparator.comparing(Match::getMatchDate).reversed())
-                .map(Match::getMatchedUser)
+                .map(match -> userRepository.findById(match.getMatchedUser().getId()).orElseThrow(UserNotFoundException::new))
                 .map(User::getUserInfo)
                 .map(UserInfoMapper::map)
                 .collect(Collectors.toCollection(ArrayList::new));

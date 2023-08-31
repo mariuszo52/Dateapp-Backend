@@ -16,11 +16,11 @@
                 <constraints nullable="false"/>
             </column>
             <column name="user_role_id" type="BIGINT">
-                <constraints nullable="true" referencedTableName="user_role"
+                <constraints nullable="false" referencedTableName="user_role"
                              referencedColumnNames="id" foreignKeyName="fk_user_role_id"/>
             </column>
             <column name="user_info_id" type="BIGINT">
-                <constraints nullable="true" referencedTableName="user_info"
+                <constraints nullable="false" referencedTableName="user_info"
                              referencedColumnNames="id" foreignKeyName="fk_user_info_id"/>
             </column>
         </createTable>

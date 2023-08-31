@@ -22,6 +22,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     @Email
     private String email;
     @Size(min = 5)
@@ -29,14 +30,14 @@ public class User implements UserDetails {
     @ManyToOne
     @JoinColumn(name = "user_role_id")
     private UserRole userRole;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user_info_id")
     private UserInfo userInfo;
-    @OneToMany(mappedBy = "user" )
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<SwipedProfile> swipedProfiles;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Match> matches;
-    @ManyToMany(mappedBy = "participants")
+    @ManyToMany(mappedBy = "participants", cascade = CascadeType.REMOVE)
     private Set<Chat> chats = new HashSet<>();
 
 

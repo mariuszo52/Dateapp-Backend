@@ -40,8 +40,9 @@ public class MatchMapper {
         matchDto.setMatchedUserId(match.getMatchedUser().getId());
         matchDto.setMatchDate(LocalDate.now());
         matchDto.setChatId(match.getChat().getId());
-        matchDto.setMatchedUserName(match.getMatchedUser().getUserInfo().getFirstName());
-        matchDto.setMatchedUserUrl(match.getMatchedUser().getUserInfo().getUrl());
+        User matchedUser = userRepository.findById(match.getMatchedUser().getId()).orElseThrow(UserNotFoundException::new);
+        matchDto.setMatchedUserName(matchedUser.getUserInfo().getFirstName());
+        matchDto.setMatchedUserUrl(matchedUser.getUserInfo().getUrl());
         return matchDto;
     }
 

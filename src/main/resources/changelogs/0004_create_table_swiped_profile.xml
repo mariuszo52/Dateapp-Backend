@@ -13,14 +13,14 @@
                 <constraints nullable="false"/>
             </column>
             <column type="VARCHAR(100)" name="swipe_direction">
-                <constraints nullable="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="user_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_user2_id"
+                <constraints nullable="true" foreignKeyName="fk_user2_id"
                              referencedTableName="users" referencedColumnNames="id"/>
             </column>
             <column name="swiped_profile_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_left_swiped"
+                <constraints nullable="true" foreignKeyName="fk_left_swiped"
                              referencedTableName="users" referencedColumnNames="id"/>
             </column>
         </createTable>

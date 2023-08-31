@@ -2,6 +2,7 @@ package com.dateapp.dateapp.swipeUsers;
 
 import com.dateapp.dateapp.config.security.LoggedUserService;
 import com.dateapp.dateapp.exceptions.user.UserNotFoundException;
+import com.dateapp.dateapp.match.Match;
 import com.dateapp.dateapp.swipedProfile.SwipedProfile;
 import com.dateapp.dateapp.user.User;
 import com.dateapp.dateapp.user.UserRepository;

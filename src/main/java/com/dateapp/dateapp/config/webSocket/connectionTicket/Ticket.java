@@ -2,14 +2,17 @@ package com.dateapp.dateapp.config.webSocket.connectionTicket;
 
 import com.dateapp.dateapp.user.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
+    @Size(min = 20, max = 20)
     private String text;
-    private boolean validity;
 
     @OneToOne
     private User user;
@@ -19,7 +22,6 @@ public class Ticket {
 
     public Ticket(String text, User user) {
         this.text = text;
-        this.validity = true;
         this.user = user;
     }
 
@@ -37,18 +39,6 @@ public class Ticket {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-
-
-
-
-    public boolean isValidity() {
-        return validity;
-    }
-
-    public void setValidity(boolean validity) {
-        this.validity = validity;
     }
 
 

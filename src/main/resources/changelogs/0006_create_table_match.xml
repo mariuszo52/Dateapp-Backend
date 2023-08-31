@@ -10,14 +10,14 @@
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
             <column name="is_matched" type="BOOLEAN" defaultOnNull="true">
-                <constraints nullable="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="match_date" type="DATE"/>
             <column name="user_id" type="BIGINT">
-                <constraints foreignKeyName="fk_user3" referencedTableName="users" referencedColumnNames="id"/>
+                <constraints nullable="true" foreignKeyName="fk_user3" referencedTableName="users" referencedColumnNames="id"/>
             </column>
             <column name="matched_user_id" type="BIGINT">
-                <constraints foreignKeyName="fk_user4" referencedTableName="users" referencedColumnNames="id"/>
+                <constraints nullable="true"/>
             </column>
             <column name="chat_id" type="BIGINT">
                 <constraints nullable="true" referencedTableName="chat" referencedColumnNames="id" foreignKeyName="fk_chat3"/>

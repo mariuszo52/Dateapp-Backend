@@ -1,7 +1,8 @@
 package com.dateapp.dateapp.user;
 
-import com.dateapp.dateapp.config.security.LoggedUserService;
 import com.dateapp.dateapp.exceptions.user.UserNotFoundException;
+import com.dateapp.dateapp.match.MatchRepository;
+import com.dateapp.dateapp.swipedProfile.SwipedProfileRepository;
 import com.dateapp.dateapp.userInfo.UserInfo;
 import com.dateapp.dateapp.userInfo.UserInfoMapper;
 import com.dateapp.dateapp.userInfo.UserInfoRepository;
@@ -27,14 +28,21 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserInfoRepository userInfoRepository;
     private final LocationRepository locationRepository;
+    private final MatchRepository matchRepository;
+    private final SwipedProfileRepository swipedProfileRepository;
 
-    public UserService(UserMapper userMapper, UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder, UserInfoRepository userInfoRepository, LocationRepository locationRepository) {
+    public UserService(UserMapper userMapper, UserRepository userRepository,
+                       UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder,
+                       UserInfoRepository userInfoRepository, LocationRepository locationRepository,
+                       MatchRepository matchRepository, SwipedProfileRepository swipedProfileRepository) {
         this.userMapper = userMapper;
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
         this.userInfoRepository = userInfoRepository;
         this.locationRepository = locationRepository;
+        this.matchRepository = matchRepository;
+        this.swipedProfileRepository = swipedProfileRepository;
     }
 
     @Transactional
@@ -88,12 +96,24 @@ public class UserService {
         }
     }
 
+    @Transactional
     public void deleteAccount(String password) {
         User user = userRepository.findById(getLoggedUserId()).orElseThrow(UserNotFoundException::new);
-        boolean matches = passwordEncoder.matches(password, user.getPassword());
-        if(matches){
+        boolean isPasswordCorrect = passwordEncoder.matches(password, user.getPassword());
+        if (isPasswordCorrect) {
+            swipedProfileRepository.findAllByUser_IdOrSwipedProfile_Id(user.getId(), user.getId())
+                    .forEach(swipedProfile -> {
+                        swipedProfile.setUser(null);
+                        swipedProfile.setSwipedProfile(null);
+                        swipedProfileRepository.deleteById(swipedProfile.getId());
+                    });
+            matchRepository.findAllByUser_IdOrMatchedUserId(user.getId(), user.getId()).forEach(match -> {
+                match.setUser(null);
+                match.setMatchedUser(null);
+                matchRepository.deleteById(match.getId());
+            });
             userRepository.deleteById(user.getId());
-        }else {
+        } else {
             throw new RuntimeException("Failed to delete user.");
         }
     }

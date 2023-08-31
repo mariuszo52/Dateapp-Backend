@@ -2,6 +2,7 @@ package com.dateapp.dateapp.swipedProfile;
 
 import com.dateapp.dateapp.user.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
@@ -11,6 +12,7 @@ public class SwipedProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String swipeDirection;
     private final LocalDateTime swipeTime = LocalDateTime.now();
     @ManyToOne

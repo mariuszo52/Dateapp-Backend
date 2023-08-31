@@ -3,6 +3,8 @@ package com.dateapp.dateapp.message;
 import com.dateapp.dateapp.chat.Chat;
 import com.dateapp.dateapp.user.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
@@ -11,9 +13,12 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private LocalDateTime sendTime;
     @OneToOne
     private User fromUser;
+    @NotNull
+    @Size(min = 1, max = 1000)
     private String text;
     @ManyToOne
     @JoinColumn(name = "chat_id")

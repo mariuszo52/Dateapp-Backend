@@ -5,7 +5,6 @@ class TicketMapper {
         TicketDto ticketDto = new TicketDto();
         ticketDto.setText(ticket.getText());
         ticketDto.setId(ticket.getId());
-        ticketDto.setValidity(ticket.isValidity());
         ticketDto.setUserId(ticket.getUser().getId());
         return ticketDto;
     }

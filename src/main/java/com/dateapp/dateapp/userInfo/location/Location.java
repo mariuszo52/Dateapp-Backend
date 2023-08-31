@@ -3,6 +3,8 @@ package com.dateapp.dateapp.userInfo.location;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -11,9 +13,15 @@ public class Location {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
+    @NotNull
+    @Size(min = 1)
     private String name;
+    @NotNull
+    @Size(min = 1)
     private String country;
+    @NotNull
     private Double latitude;
+    @NotNull
     private Double longitude;
 
     public Location() {

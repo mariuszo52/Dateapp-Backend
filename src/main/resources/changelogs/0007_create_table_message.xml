@@ -9,12 +9,14 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
-            <column name="send_time" type="DATETIME"/>
+            <column name="send_time" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
             <column name="from_user_id" type="BIGINT">
                 <constraints foreignKeyName="fk_user7" referencedTableName="users" referencedColumnNames="id"/>
             </column>
             <column name="text" type="VARCHAR(1000)">
-                <constraints nullable="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="chat_id" type="BIGINT">
                 <constraints foreignKeyName="fk_chat" referencedTableName="chat" referencedColumnNames="id"/>

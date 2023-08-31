@@ -3,6 +3,7 @@ package com.dateapp.dateapp.match;
 import com.dateapp.dateapp.chat.Chat;
 import com.dateapp.dateapp.user.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
@@ -11,6 +12,7 @@ public class Match {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private Boolean isMatched;
     @ManyToOne
     private User user;
@@ -18,6 +20,7 @@ public class Match {
     private User matchedUser;
     @ManyToOne
     private Chat chat;
+    @NotNull
     private LocalDate matchDate;
 
     public LocalDate getMatchDate() {
