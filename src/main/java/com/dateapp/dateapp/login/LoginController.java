@@ -11,11 +11,18 @@ import com.dateapp.dateapp.userInfo.UserInfoMapper;
 import com.dateapp.dateapp.userInfo.UserInfoService;
 import com.dateapp.dateapp.userInfo.location.LocationDto;
 import com.dateapp.dateapp.userInfo.location.LocationService;
+import jakarta.validation.Valid;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.dateapp.dateapp.userInfo.UserInfoMapper.map;
 
@@ -26,14 +33,13 @@ public class LoginController {
     private final JwtTokenService jwtTokenService;
     private final DaoAuthenticationProvider daoAuthenticationProvider;
     private final UserInfoService userInfoService;
-    private final LocationService locationService;
 
-    public LoginController(UserService userService, JwtTokenService jwtTokenService, DaoAuthenticationProvider daoAuthenticationProvider, UserInfoService userInfoService, LocationService locationService) {
+    public LoginController(UserService userService, JwtTokenService jwtTokenService,
+                           DaoAuthenticationProvider daoAuthenticationProvider, UserInfoService userInfoService) {
         this.userService = userService;
         this.jwtTokenService = jwtTokenService;
         this.daoAuthenticationProvider = daoAuthenticationProvider;
         this.userInfoService = userInfoService;
-        this.locationService = locationService;
     }
 
     @GetMapping("/matched-user-info")
@@ -51,11 +57,12 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    ResponseEntity<String> login(@RequestBody UserRegisterDto userRegisterDto) {
+    ResponseEntity<String> login(@Valid @RequestBody UserLoginDto userLoginDto) {
         try {
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userRegisterDto.getEmail(), userRegisterDto.getPassword());
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(userLoginDto.getEmail(), userLoginDto.getPassword());
             daoAuthenticationProvider.authenticate(authentication);
-            UserRegisterDto loggedUser = userService.findUserByEmail(userRegisterDto.getEmail());
+            UserRegisterDto loggedUser = userService.findUserByEmail(userLoginDto.getEmail());
             String jwtToken = jwtTokenService.generateJwtToken(loggedUser);
            return ResponseEntity.status(HttpStatus.CREATED).body(jwtToken);
         } catch (RuntimeException  e) {
@@ -64,7 +71,7 @@ public class LoginController {
     }
 
     @PostMapping("/register")
-    ResponseEntity<String> register(@RequestBody UserRegisterDto userRegisterDto) {
+    ResponseEntity<String> register(@Valid @RequestBody UserRegisterDto userRegisterDto) {
         try{
             userService.registerUser(userRegisterDto);
             return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -72,5 +79,6 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
 }
 

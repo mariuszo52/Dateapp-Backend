@@ -1,10 +1,22 @@
 package com.dateapp.dateapp.userInfo.location;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class LocationDto {
     private Long id;
+    @NotNull
+    @NotBlank
+    @Size(min = 1)
     private String name;
+    @NotNull
+    @Size(max = 3)
     private String country;
+    @NotNull
     private Double latitude;
+    @NotNull
     private Double longitude;
 
     public LocationDto(String name, String country, Double latitude, Double longitude) {

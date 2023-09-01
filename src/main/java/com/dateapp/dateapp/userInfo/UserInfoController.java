@@ -2,6 +2,7 @@ package com.dateapp.dateapp.userInfo;
 
 import com.dateapp.dateapp.config.security.LoggedUserService;
 import com.dateapp.dateapp.userInfo.userInfoEdit.UserInfoEditDto;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class UserInfoController {
     }
 
     @PutMapping("/user-info-edit")
-    public ResponseEntity<?> getUserInfoEditDto(@RequestBody UserInfoEditDto userInfoEditDto) {
+    public ResponseEntity<?> getUserInfoEditDto(@Valid @RequestBody UserInfoEditDto userInfoEditDto) {
         try {
             UserInfoDto userInfoDto = userInfoService.updateUserInfo(userInfoEditDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(userInfoDto);

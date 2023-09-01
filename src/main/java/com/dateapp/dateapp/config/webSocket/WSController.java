@@ -7,6 +7,7 @@ import com.dateapp.dateapp.exceptions.chat.ChatNotFoundException;
 import com.dateapp.dateapp.exceptions.message.MessageException;
 import com.dateapp.dateapp.message.MessageDto;
 import com.dateapp.dateapp.message.MessageService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -27,7 +28,7 @@ public class WSController {
     }
 
     @PostMapping("send-message")
-    public ResponseEntity<String> sendMessage(@RequestBody MessageDto message) {
+    public ResponseEntity<String> sendMessage(@Valid @RequestBody MessageDto message) {
         try {
             messageService.checkPermissionToSend(message);
             messageService.checkDurationMessage(message);
@@ -42,7 +43,7 @@ public class WSController {
     }
 
     @PostMapping("ws-ticket")
-    public ResponseEntity<TicketDto> getAndSaveTicket(@RequestParam Long userId) {
+    public ResponseEntity<TicketDto> generateTicket(@RequestParam Long userId) {
         return ResponseEntity.ok().body(ticketService.generateTicket(userId));
     }
 

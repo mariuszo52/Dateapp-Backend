@@ -1,10 +1,14 @@
 package com.dateapp.dateapp.swipedProfile;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 
 public class SwipedProfileDto {
     private LocalDateTime swipeTime;
+    @NotNull
     private long userId;
+    @NotNull
     private long swipedProfileId;
 
     public SwipedProfileDto() {

@@ -4,6 +4,7 @@ import com.dateapp.dateapp.chat.Chat;
 import com.dateapp.dateapp.chat.ChatService;
 import com.dateapp.dateapp.match.MatchDto;
 import com.dateapp.dateapp.match.MatchService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ class SwipedProfileController {
     private final SwipedProfileService swipedProfileService;
     private final MatchService matchService;
     private final ChatService chatService;
+    private static final String MATCH_MESSAGE = "match";
 
     SwipedProfileController(SwipedProfileService swipedProfileService, MatchService matchService, ChatService chatService) {
         this.swipedProfileService = swipedProfileService;
@@ -32,7 +34,7 @@ class SwipedProfileController {
     }
 
     @PostMapping("/swipe-left")
-    ResponseEntity<String> addLeftSwipedProfile(@RequestBody SwipedProfileDto leftSwipedProfile) {
+    ResponseEntity<String> addLeftSwipedProfile(@Valid @RequestBody SwipedProfileDto leftSwipedProfile) {
         try {
             if (matchService.checkMatch(leftSwipedProfile, RIGHT_SWIPE)) {
                 MatchDto matchDto = createMatchDto(leftSwipedProfile, false);
@@ -50,7 +52,7 @@ class SwipedProfileController {
     }
 
     @PostMapping("/swipe-right")
-    ResponseEntity<String> addRightSwipedProfile(@RequestBody SwipedProfileDto rightSwipedProfile) {
+    ResponseEntity<String> addRightSwipedProfile(@Valid@RequestBody SwipedProfileDto rightSwipedProfile) {
         try {
             if (matchService.checkMatch(rightSwipedProfile, LEFT_SWIPE)) {
                 MatchDto matchDto = createMatchDto(rightSwipedProfile, false);
@@ -59,9 +61,9 @@ class SwipedProfileController {
                 MatchDto matchDto = createMatchDto(rightSwipedProfile, true);
                 Chat chat = chatService.createChat(matchDto);
                 matchService.saveMatch(matchDto, chat);
-                swipedProfileService.deleteMatchedLikes(rightSwipedProfile.getUserId(), rightSwipedProfile.getSwipedProfileId());
-
-                return ResponseEntity.ok().body("match");
+                swipedProfileService.deleteMatchedLikes(rightSwipedProfile.getUserId(),
+                        rightSwipedProfile.getSwipedProfileId());
+                return ResponseEntity.ok().body(MATCH_MESSAGE);
             } else {
                 swipedProfileService.saveRightSwipe(rightSwipedProfile);
             }
