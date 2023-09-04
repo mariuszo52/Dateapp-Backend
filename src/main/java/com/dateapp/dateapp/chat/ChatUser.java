@@ -3,8 +3,14 @@ package com.dateapp.dateapp.chat;
 import com.dateapp.dateapp.chat.Chat;
 import com.dateapp.dateapp.user.User;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "chat_users")
 public class ChatUser {
 
@@ -23,38 +29,4 @@ public class ChatUser {
     @Column(name = "notifications")
     private Long notifications;
 
-    public ChatUser() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Chat getChat() {
-        return chat;
-    }
-
-    public void setChat(Chat chat) {
-        this.chat = chat;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Long getNotifications() {
-        return notifications;
-    }
-
-    public void setNotifications(Long notifications) {
-        this.notifications = notifications;
-    }
 }

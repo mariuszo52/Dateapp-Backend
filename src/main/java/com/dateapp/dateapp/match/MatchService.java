@@ -36,7 +36,7 @@ public class MatchService {
         MatchDto matchDto1 = new MatchDto();
         matchDto1.setUserId(matchDto.getMatchedUserId());
         matchDto1.setMatchedUserId(matchDto.getUserId());
-        matchDto1.setMatched(true);
+        matchDto1.setIsMatched(true);
         matchDto1.setMatchDate(LocalDate.now());
         matchDto1.setChatId(chat.getId());
         Match match1 = matchMapper.map(matchDto1);
@@ -49,7 +49,7 @@ public class MatchService {
         MatchDto matchDto1 = new MatchDto();
         matchDto1.setUserId(matchDto.getMatchedUserId());
         matchDto1.setMatchedUserId(matchDto.getUserId());
-        matchDto1.setMatched(false);
+        matchDto1.setIsMatched(false);
         matchDto1.setMatchDate(LocalDate.now());
         Match match1 = matchMapper.map(matchDto1);
         matchRepository.save(match);
@@ -67,7 +67,7 @@ public class MatchService {
 
     public ArrayList<UserInfoDto> getAllUserMatchesInfo(Long userId) {
         return matchRepository.findAllByUser_Id(userId).stream()
-                .filter(match -> match.getMatched().equals(true))
+                .filter(match -> match.getIsMatched().equals(true))
                 .sorted(Comparator.comparing(Match::getMatchDate).reversed())
                 .map(match -> userRepository.findById(match.getMatchedUser().getId()).orElseThrow(UserNotFoundException::new))
                 .map(User::getUserInfo)
@@ -81,7 +81,7 @@ public class MatchService {
     public void deleteMatch(Long chatId) {
         matchRepository.findMatchByChatId(chatId)
                 .forEach(match ->{
-                    match.setMatched(false);
+                    match.setIsMatched(false);
                     match.setChat(null);
                 });
         chatRepository.deleteById(chatId);

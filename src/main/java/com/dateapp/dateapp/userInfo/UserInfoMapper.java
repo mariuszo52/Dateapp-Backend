@@ -3,6 +3,7 @@ package com.dateapp.dateapp.userInfo;
 import com.dateapp.dateapp.userInfo.location.LocationMapper;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class UserInfoMapper {
     public static UserInfo map(UserInfoDto userInfoDto) {
@@ -18,7 +19,6 @@ public class UserInfoMapper {
         userInfo.setUrl(userInfoDto.getUrl());
         userInfo.setAbout(userInfoDto.getAbout());
         userInfo.setMaxDistance(userInfoDto.getMaxDistance());
-
         return userInfo;
     }
 
@@ -35,7 +35,10 @@ public class UserInfoMapper {
         userInfoDto.setUrl(userInfo.getUrl());
         userInfoDto.setAbout(userInfo.getAbout());
         userInfoDto.setMaxDistance(userInfo.getMaxDistance());
-        userInfoDto.setAge();
+        int age = (int) ChronoUnit.YEARS.between(userInfo.getDateOfBirth(), LocalDate.now());
+        userInfoDto.setAge(age);
         return userInfoDto;
     }
+
+
 }

@@ -21,7 +21,7 @@ public class MatchMapper {
 
     public Match map(MatchDto matchDto){
         Match match = new Match();
-        match.setMatched(matchDto.getMatched());
+        match.setIsMatched(matchDto.getIsMatched());
         User user = userRepository.findById(matchDto.getUserId()).orElseThrow(UserNotFoundException::new);
         match.setUser(user);
         User matchedUser = userRepository.findById(matchDto.getMatchedUserId()).orElseThrow(UserNotFoundException::new);
@@ -35,7 +35,7 @@ public class MatchMapper {
     }
     public MatchDto map(Match match){
         MatchDto matchDto = new MatchDto();
-        matchDto.setMatched(match.getMatched());
+        matchDto.setIsMatched(match.getIsMatched());
         matchDto.setUserId(match.getUser().getId());
         matchDto.setMatchedUserId(match.getMatchedUser().getId());
         matchDto.setMatchDate(LocalDate.now());

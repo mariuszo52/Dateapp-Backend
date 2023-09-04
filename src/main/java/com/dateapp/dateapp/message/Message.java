@@ -5,10 +5,16 @@ import com.dateapp.dateapp.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,56 +30,5 @@ public class Message {
     @JoinColumn(name = "chat_id")
     private Chat chat;
 
-    public Message(Long id, User fromUser, String text, Chat chat) {
-        this.id = id;
-        this.sendTime = LocalDateTime.now();
-        this.fromUser = fromUser;
-        this.text = text;
-        this.chat = chat;
-    }
-
-    public User getFromUser() {
-        return fromUser;
-    }
-
-    public void setFromUser(User fromUser) {
-        this.fromUser = fromUser;
-    }
-
-    public LocalDateTime getSendTime() {
-        return sendTime;
-    }
-
-    public void setSendTime(LocalDateTime sendTime) {
-        this.sendTime = sendTime;
-    }
-
-    public Message() {
-
-    }
-
-    public Chat getChat() {
-        return chat;
-    }
-
-    public void setChat(Chat chat) {
-        this.chat = chat;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
 
 }

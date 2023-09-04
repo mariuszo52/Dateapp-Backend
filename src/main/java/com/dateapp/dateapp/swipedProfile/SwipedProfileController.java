@@ -29,8 +29,12 @@ class SwipedProfileController {
     }
     @GetMapping("/all-swiped-profiles")
     ResponseEntity<?> getAllUserSwipedProfilesIds(){
-        Set<Long> allUserSwipedProfiles = swipedProfileService.getAllUserSwipedProfilesIds();
-        return ResponseEntity.ok().body(allUserSwipedProfiles);
+        try {
+            Set<Long> allUserSwipedProfiles = swipedProfileService.getAllUserSwipedProfilesIds();
+            return ResponseEntity.ok().body(allUserSwipedProfiles);
+        }catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/swipe-left")
@@ -76,7 +80,7 @@ class SwipedProfileController {
 
     private static MatchDto createMatchDto(SwipedProfileDto swipedProfile, boolean isMatched) {
         MatchDto matchDto = new MatchDto();
-        matchDto.setMatched(isMatched);
+        matchDto.setIsMatched(isMatched);
         matchDto.setUserId(swipedProfile.getUserId());
         matchDto.setMatchedUserId(swipedProfile.getSwipedProfileId());
         return matchDto;

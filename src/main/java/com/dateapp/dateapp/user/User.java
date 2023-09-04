@@ -10,6 +10,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +20,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
@@ -40,54 +46,6 @@ public class User implements UserDetails {
     @ManyToMany(mappedBy = "participants", cascade = CascadeType.REMOVE)
     private Set<Chat> chats = new HashSet<>();
 
-
-    public void setMatches(List<Match> matches) {
-        this.matches = matches;
-    }
-
-    public Set<Chat> getChats() {
-        return chats;
-    }
-
-    public void setChats(Set<Chat> chats) {
-        this.chats = chats;
-    }
-
-    public List<Match> getMatches() {
-        return matches;
-    }
-
-    public List<SwipedProfile> getSwipedProfiles() {
-        return swipedProfiles;
-    }
-
-    public void setSwipedProfiles(List<SwipedProfile> swipedProfiles) {
-        this.swipedProfiles = swipedProfiles;
-    }
-
-    public UserInfo getUserInfo() {
-        return userInfo;
-    }
-
-    public void setUserInfo(UserInfo userInfo) {
-        this.userInfo = userInfo;
-    }
-    public UserRole getUserRole() {
-        return userRole;
-    }
-
-    public void setUserRole(UserRole userRole) {
-        this.userRole = userRole;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public User(Long id, String email) {
         this.id = id;
         this.email = email;
@@ -96,6 +54,11 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority("USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     @Override
@@ -121,25 +84,6 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public User() {
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
 }
