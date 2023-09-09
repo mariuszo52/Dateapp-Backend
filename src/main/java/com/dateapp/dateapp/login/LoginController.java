@@ -2,46 +2,59 @@ package com.dateapp.dateapp.login;
 
 
 import com.dateapp.dateapp.exceptions.UnauthorizedResourceAccessException;
-import com.dateapp.dateapp.jwtToken.JwtTokenService;
+import com.dateapp.dateapp.tokens.TokensService;
 import com.dateapp.dateapp.user.UserRegisterDto;
 import com.dateapp.dateapp.user.UserService;
-import com.dateapp.dateapp.userInfo.UserInfo;
 import com.dateapp.dateapp.userInfo.UserInfoDto;
-import com.dateapp.dateapp.userInfo.UserInfoMapper;
 import com.dateapp.dateapp.userInfo.UserInfoService;
-import com.dateapp.dateapp.userInfo.location.LocationDto;
-import com.dateapp.dateapp.userInfo.location.LocationService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import static com.dateapp.dateapp.userInfo.UserInfoMapper.map;
+import java.sql.Array;
+import java.util.Arrays;
 
 @RestController
 @CrossOrigin
 public class LoginController {
     private final UserService userService;
-    private final JwtTokenService jwtTokenService;
+    private final TokensService tokensService;
     private final DaoAuthenticationProvider daoAuthenticationProvider;
     private final UserInfoService userInfoService;
 
-    public LoginController(UserService userService, JwtTokenService jwtTokenService,
+    public LoginController(UserService userService, TokensService tokensService,
                            DaoAuthenticationProvider daoAuthenticationProvider, UserInfoService userInfoService) {
         this.userService = userService;
-        this.jwtTokenService = jwtTokenService;
+        this.tokensService = tokensService;
         this.daoAuthenticationProvider = daoAuthenticationProvider;
         this.userInfoService = userInfoService;
     }
+    @GetMapping("/refresh-token")
+    ResponseEntity<String> refreshToken(HttpServletRequest request){
+        String refreshingToken = request.getHeader("Refresh-token");
+        final String token = refreshingToken.substring(7);
+        try {
+            Jws<Claims> claims = Jwts.parser().setSigningKey("secret").parseClaimsJws(token);
+            Long id = claims.getBody().get("id", Long.class);
+            String username = claims.getBody().get("username", String.class);
+            String password = claims.getBody().get("password", String.class);
+            UserRegisterDto userRegisterDto = new UserRegisterDto(id,username, password);
 
+            String jwtToken = tokensService.generateToken(userRegisterDto, 20);
+            return ResponseEntity.ok(jwtToken);
+        }catch (JwtException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
     @GetMapping("/matched-user-info")
     ResponseEntity<?> getMatchedUserInfo(@RequestParam Long userId, @RequestParam Long chatId) {
         try {
@@ -57,14 +70,16 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    ResponseEntity<String> login(@Valid @RequestBody UserLoginDto userLoginDto) {
+    ResponseEntity<?> login(@Valid @RequestBody UserLoginDto userLoginDto) {
         try {
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userLoginDto.getEmail(), userLoginDto.getPassword());
             daoAuthenticationProvider.authenticate(authentication);
             UserRegisterDto loggedUser = userService.findUserByEmail(userLoginDto.getEmail());
-            String jwtToken = jwtTokenService.generateJwtToken(loggedUser);
-           return ResponseEntity.status(HttpStatus.CREATED).body(jwtToken);
+            String jwtToken = tokensService.generateToken(loggedUser, 20);
+            String refreshingToken = tokensService.generateToken(loggedUser, 30 * 24 * 60);
+            String[] response = {jwtToken, refreshingToken};
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (RuntimeException  e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

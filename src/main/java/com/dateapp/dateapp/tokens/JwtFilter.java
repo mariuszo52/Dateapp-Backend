@@ -1,8 +1,9 @@
-package com.dateapp.dateapp.jwtToken;
+package com.dateapp.dateapp.tokens;
 
 import com.dateapp.dateapp.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -35,9 +36,15 @@ public class JwtFilter extends OncePerRequestFilter {
         } else if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             response.setStatus(HttpStatus.FORBIDDEN.value());
         } else {
-            Jws<Claims> claimsJws = parseToken(authHeader);
-            UsernamePasswordAuthenticationToken authenticationByToken = getAuthenticationByToken(claimsJws);
-            SecurityContextHolder.getContext().setAuthentication(authenticationByToken);
+            try {
+                Jws<Claims> claimsJws = parseToken(authHeader);
+                UsernamePasswordAuthenticationToken authenticationByToken = getAuthenticationByToken(claimsJws);
+                SecurityContextHolder.getContext().setAuthentication(authenticationByToken);
+            }catch (JwtException e){
+                System.out.println(e.getMessage());
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+            }
+
             filterChain.doFilter(request, response);
         }
 
@@ -66,7 +73,7 @@ public class JwtFilter extends OncePerRequestFilter {
         return path.equals("/register") || path.equals("/login")
                 || path.equals("/userinfo") || path.startsWith("/chat")
                 || path.startsWith("/h2-console") || path.startsWith("/v3/api-docs")
-                || path.startsWith("/swagger-ui");
+                || path.startsWith("/swagger-ui") || path.equals("/refresh-token");
     }
 
 }

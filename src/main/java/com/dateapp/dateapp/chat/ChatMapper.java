@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class ChatMapper {
     private final MatchMapper matchMapper;
-    private static final String DEFAULT_MESSAGE = "Now you can start conversation.";
+    private static final String DEFAULT_MESSAGE = "You can start conversation.";
     private static final LocalDateTime DEFAULT_DATETIME =
             LocalDateTime.of(2023,1,1,0,0,0);
 

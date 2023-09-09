@@ -1,4 +1,4 @@
-package com.dateapp.dateapp.jwtToken;
+package com.dateapp.dateapp.tokens;
 
 import com.dateapp.dateapp.user.UserRegisterDto;
 import io.jsonwebtoken.Jwts;
@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class JwtTokenService {
+public class TokensService {
 
-    public String generateJwtToken(UserRegisterDto userRegisterDto) {
+    public String generateToken(UserRegisterDto userRegisterDto, long expirationMinutes) {
         long now = System.currentTimeMillis();
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", userRegisterDto.getId());
@@ -24,7 +24,7 @@ public class JwtTokenService {
                 .setClaims(claims)
                 .signWith(SignatureAlgorithm.HS512, "secret")
                 .setIssuedAt(new Date(now))
-                .setExpiration(new Date(now + 60 * 60 * 1000))
+                .setExpiration(new Date(now + expirationMinutes * 60 * 1000))
                 .compact();
 
     }
