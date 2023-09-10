@@ -27,12 +27,13 @@ class SwipedProfileController {
         this.matchService = matchService;
         this.chatService = chatService;
     }
+
     @GetMapping("/all-swiped-profiles")
-    ResponseEntity<?> getAllUserSwipedProfilesIds(){
+    ResponseEntity<?> getAllUserSwipedProfilesIds() {
         try {
             Set<Long> allUserSwipedProfiles = swipedProfileService.getAllUserSwipedProfilesIds();
             return ResponseEntity.ok().body(allUserSwipedProfiles);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -56,7 +57,7 @@ class SwipedProfileController {
     }
 
     @PostMapping("/swipe-right")
-    ResponseEntity<String> addRightSwipedProfile(@Valid@RequestBody SwipedProfileDto rightSwipedProfile) {
+    ResponseEntity<String> addRightSwipedProfile(@Valid @RequestBody SwipedProfileDto rightSwipedProfile) {
         try {
             if (matchService.checkMatch(rightSwipedProfile, LEFT_SWIPE)) {
                 MatchDto matchDto = createMatchDto(rightSwipedProfile, false);

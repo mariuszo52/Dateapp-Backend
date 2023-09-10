@@ -1,7 +1,7 @@
 package com.dateapp.dateapp.userInfo.location;
 
 public class LocationMapper {
-    public static Location map(LocationDto locationDto){
+    public static Location map(LocationDto locationDto) {
         Location location = new Location();
         location.setId(locationDto.getId());
         location.setCountry(locationDto.getCountry());
@@ -12,7 +12,7 @@ public class LocationMapper {
 
     }
 
-    public static LocationDto map(Location location){
+    public static LocationDto map(Location location) {
         LocationDto locationDto = new LocationDto();
         locationDto.setId(location.getId());
         locationDto.setName(location.getName());

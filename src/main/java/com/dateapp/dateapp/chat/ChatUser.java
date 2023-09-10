@@ -1,8 +1,8 @@
 package com.dateapp.dateapp.chat;
 
-import com.dateapp.dateapp.chat.Chat;
 import com.dateapp.dateapp.user.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +15,7 @@ import lombok.Setter;
 public class ChatUser {
 
     @Id
+    @Min(1)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

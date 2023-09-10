@@ -2,6 +2,7 @@ package com.dateapp.dateapp.swipedProfile;
 
 import com.dateapp.dateapp.user.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @Table(name = "swiped_profile")
 public class SwipedProfile {
     @Id
+    @Min(1)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull

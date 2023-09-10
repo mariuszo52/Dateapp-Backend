@@ -2,10 +2,10 @@ package com.dateapp.dateapp.swipedProfile;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class SwipedProfileDto {

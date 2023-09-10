@@ -23,6 +23,7 @@ public class SwipedProfileService {
         this.swipedProfileRepository = swipedProfileRepository;
         this.userRepository = userRepository;
     }
+
     @Transactional
     public void saveLeftSwipe(SwipedProfileDto leftSwipedDto) {
         User user = userRepository.findById(leftSwipedDto.getUserId()).orElseThrow(UserNotFoundException::new);
@@ -30,6 +31,7 @@ public class SwipedProfileService {
         SwipedProfile swipedProfile = createSwipedProfile(user, swipedUser, LEFT_SWIPE);
         swipedProfileRepository.save(swipedProfile);
     }
+
     @Transactional
     public void saveRightSwipe(SwipedProfileDto rightSwipedProfile) {
         User user = userRepository.findById(rightSwipedProfile.getUserId()).orElseThrow(UserNotFoundException::new);
@@ -37,12 +39,13 @@ public class SwipedProfileService {
         SwipedProfile swipedProfile = createSwipedProfile(user, swipedUser, RIGHT_SWIPE);
         swipedProfileRepository.save(swipedProfile);
     }
+
     @Transactional
-    public void deleteMatchedLikes(Long user1Id, Long user2Id){
+    public void deleteMatchedLikes(Long user1Id, Long user2Id) {
         swipedProfileRepository.deleteSwipedProfileByUser_IdAndSwipedProfile_Id(user2Id, user1Id);
     }
 
-    Set<Long> getAllUserSwipedProfilesIds(){
+    Set<Long> getAllUserSwipedProfilesIds() {
         User user = userRepository.findById(getLoggedUserId()).orElseThrow(UserNotFoundException::new);
         return user.getSwipedProfiles().stream()
                 .map(SwipedProfileMapper::map)

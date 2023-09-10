@@ -19,18 +19,17 @@ public class LikeController {
     public LikeController(LikeService likeService) {
         this.likeService = likeService;
     }
-   @GetMapping("/likes-received")
-    ResponseEntity<?> getAllUserReceivedLikes(){
+
+    @GetMapping("/likes-received")
+    ResponseEntity<?> getAllUserReceivedLikes() {
         try {
             long userId = getLoggedUserId();
             ArrayList<UserInfoDto> allUserReceivedLikes = likeService.getAllUserReceivedLikes(userId);
             return ResponseEntity.ok(allUserReceivedLikes);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
-
 
 
 }

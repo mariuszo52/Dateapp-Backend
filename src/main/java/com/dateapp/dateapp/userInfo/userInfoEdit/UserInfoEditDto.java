@@ -2,9 +2,9 @@ package com.dateapp.dateapp.userInfo.userInfoEdit;
 
 import jakarta.validation.constraints.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
+
 @Getter
 @Setter
 public class UserInfoEditDto {
@@ -42,7 +42,6 @@ public class UserInfoEditDto {
     @NotBlank
     @Size(min = 1, max = 1000)
     private String about;
-
 
 
 }

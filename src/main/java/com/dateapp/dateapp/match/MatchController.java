@@ -1,7 +1,6 @@
 package com.dateapp.dateapp.match;
 
 import com.dateapp.dateapp.userInfo.UserInfoDto;
-import org.antlr.v4.runtime.RuntimeMetaData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,17 +24,18 @@ class MatchController {
         try {
             ArrayList<UserInfoDto> allUserMatchesInfo = matchService.getAllUserMatchesInfo(getLoggedUserId());
             return ResponseEntity.ok(allUserMatchesInfo);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
     @PutMapping("/unmatch")
-    ResponseEntity<String> deleteMatch(@RequestParam Long chatId){
-        try{
+    ResponseEntity<String> deleteMatch(@RequestParam Long chatId) {
+        try {
             matchService.deleteMatch(chatId);
             return ResponseEntity.ok().build();
-        }catch (RuntimeException e){
-           return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

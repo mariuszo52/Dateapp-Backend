@@ -1,13 +1,6 @@
 package com.dateapp.dateapp.userInfo.location;
 
-import com.dateapp.dateapp.userInfo.UserInfo;
-import com.dateapp.dateapp.userInfo.UserInfoDto;
-import com.dateapp.dateapp.userInfo.UserInfoMapper;
-import org.apache.lucene.util.SloppyMath;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 import static org.apache.lucene.util.SloppyMath.haversinMeters;
 import static org.apache.lucene.util.SloppyMath.haversinSortKey;

@@ -18,7 +18,7 @@ public class ChatMapper {
     private final MatchMapper matchMapper;
     private static final String DEFAULT_MESSAGE = "You can start conversation.";
     private static final LocalDateTime DEFAULT_DATETIME =
-            LocalDateTime.of(2023,1,1,0,0,0);
+            LocalDateTime.of(2023, 1, 1, 0, 0, 0);
 
     ChatMapper(MatchMapper matchMapper) {
         this.matchMapper = matchMapper;
@@ -38,13 +38,13 @@ public class ChatMapper {
         chatDto.setMatchDtos(matchesDtos);
         setLastMessage(chat, chatDto);
         return chatDto;
-}
+    }
 
     private static void setLastMessage(Chat chat, ChatDto chatDto) {
         TreeSet<Message> messages = chat.getMessages().stream()
                 .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Message::getSendTime))));
         Message lastMessage = null;
-        if(!messages.isEmpty()) {
+        if (!messages.isEmpty()) {
             int lastMessageIndex = messages.size() - 1;
             lastMessage = (Message) messages.toArray()[lastMessageIndex];
         }
@@ -55,6 +55,6 @@ public class ChatMapper {
         } else {
             chatDto.setLastMessage(DEFAULT_MESSAGE);
             chatDto.setLastMessageTime(DEFAULT_DATETIME);
-    }
+        }
     }
 }

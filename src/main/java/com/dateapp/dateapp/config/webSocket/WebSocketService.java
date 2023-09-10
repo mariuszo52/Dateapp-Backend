@@ -13,7 +13,7 @@ public class WebSocketService {
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
-    public void notifyFrontend(MessageDto messageDto){
+    public void notifyFrontend(MessageDto messageDto) {
         simpMessagingTemplate.convertAndSend("/topic/" + messageDto.getChatId(), messageDto);
     }
 

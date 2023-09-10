@@ -13,25 +13,28 @@ public class ChatUserService {
         this.chatUserRepository = chatUserRepository;
     }
 
-    public ChatUser getChatUserEntityByUserIdAndChatId(long userId, long chatId){
+    public ChatUser getChatUserEntityByUserIdAndChatId(long userId, long chatId) {
         return chatUserRepository.findByChat_IdAndUserId(chatId, userId).orElseThrow();
     }
 
     @Transactional
-    public void updateNotificationCounter(ChatUser chatUser){
+    public void updateNotificationCounter(ChatUser chatUser) {
         chatUser.setNotifications(chatUser.getNotifications() + 1);
     }
-    public long getUserChatNotificationCounter(long userId, long chatId){
+
+    public long getUserChatNotificationCounter(long userId, long chatId) {
         return chatUserRepository.findByChat_IdAndUserId(chatId, userId).orElseThrow().getNotifications();
     }
-    public long checkUserUnreadChats(long userId){
+
+    public long checkUserUnreadChats(long userId) {
         List<ChatUser> userChats = chatUserRepository.findByUser_Id(userId);
         return userChats.stream()
                 .filter(chat -> chat.getNotifications() > 0)
                 .count();
     }
+
     @Transactional
-    public void resetUnreadMessagesCounter(long userId, long chatId){
+    public void resetUnreadMessagesCounter(long userId, long chatId) {
         ChatUser chatUser = chatUserRepository.findByChat_IdAndUserId(chatId, userId).orElseThrow();
         chatUser.setNotifications(0L);
     }

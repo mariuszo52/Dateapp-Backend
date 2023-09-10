@@ -2,6 +2,7 @@ package com.dateapp.dateapp.config.webSocket;
 
 import com.dateapp.dateapp.config.webSocket.connectionTicket.Ticket;
 import com.dateapp.dateapp.config.webSocket.connectionTicket.TicketRepository;
+import lombok.NonNull;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class CustomHandshakeInterceptor implements HandshakeInterceptor {
     }
 
     @Override
-    public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
+    public boolean beforeHandshake(ServerHttpRequest request, @NonNull ServerHttpResponse response, @NonNull WebSocketHandler wsHandler, @NonNull Map<String, Object> attributes) {
         String query = request.getURI().getRawQuery();
         String ticketText = query.substring(11);
         return StreamSupport.stream(ticketRepository.findAll().spliterator(), false)
@@ -29,7 +30,7 @@ public class CustomHandshakeInterceptor implements HandshakeInterceptor {
     }
 
     @Override
-    public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Exception exception) {
+    public void afterHandshake(ServerHttpRequest request, @NonNull ServerHttpResponse response, @NonNull WebSocketHandler wsHandler, Exception exception) {
         String query = request.getURI().getRawQuery();
         String ticketText = query.substring(11);
         Ticket ticket = ticketRepository.findByText(ticketText).orElseThrow();

@@ -7,7 +7,8 @@
     <changeSet id="0010" author="Mariusz">
         <addColumn tableName="user_info">
             <column name="location_id" type="BIGINT">
-                <constraints nullable="true" foreignKeyName="fk_location" referencedTableName="location" referencedColumnNames="id"/>
+                <constraints nullable="true" foreignKeyName="fk_location" referencedTableName="location"
+                             referencedColumnNames="id"/>
             </column>
         </addColumn>
     </changeSet>

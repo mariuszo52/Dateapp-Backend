@@ -1,6 +1,5 @@
 package com.dateapp.dateapp.user;
 
-import com.dateapp.dateapp.userInfo.UserInfo;
 import com.dateapp.dateapp.userInfo.UserInfoDto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;

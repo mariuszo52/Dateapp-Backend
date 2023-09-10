@@ -22,7 +22,7 @@ public class UserInfoMapper {
         return userInfo;
     }
 
-    public static UserInfoDto map(UserInfo userInfo){
+    public static UserInfoDto map(UserInfo userInfo) {
         UserInfoDto userInfoDto = new UserInfoDto();
         userInfoDto.setId(userInfo.getId());
         userInfoDto.setFirstName(userInfo.getFirstName());

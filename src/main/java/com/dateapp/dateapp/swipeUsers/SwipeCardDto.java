@@ -1,7 +1,6 @@
 package com.dateapp.dateapp.swipeUsers;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter

@@ -14,13 +14,15 @@
             </column>
             <column name="match_date" type="DATE"/>
             <column name="user_id" type="BIGINT">
-                <constraints nullable="true" foreignKeyName="fk_user3" referencedTableName="users" referencedColumnNames="id"/>
+                <constraints nullable="true" foreignKeyName="fk_user3" referencedTableName="users"
+                             referencedColumnNames="id"/>
             </column>
             <column name="matched_user_id" type="BIGINT">
                 <constraints nullable="true"/>
             </column>
             <column name="chat_id" type="BIGINT">
-                <constraints nullable="true" referencedTableName="chat" referencedColumnNames="id" foreignKeyName="fk_chat3"/>
+                <constraints nullable="true" referencedTableName="chat" referencedColumnNames="id"
+                             foreignKeyName="fk_chat3"/>
             </column>
         </createTable>
     </changeSet>

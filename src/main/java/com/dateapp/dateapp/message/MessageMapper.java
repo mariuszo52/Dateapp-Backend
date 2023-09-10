@@ -19,7 +19,7 @@ public class MessageMapper {
         this.userRepository = userRepository;
     }
 
-    public Message map(MessageDto messageDto){
+    public Message map(MessageDto messageDto) {
         Message message = new Message();
         message.setSendTime(LocalDateTime.now());
         User fromUser = userRepository.findById(messageDto.getFromUserId()).orElseThrow(UserNotFoundException::new);
@@ -29,7 +29,8 @@ public class MessageMapper {
         message.setChat(chat);
         return message;
     }
-    public MessageDto map(Message message){
+
+    public MessageDto map(Message message) {
         MessageDto messageDto = new MessageDto();
         messageDto.setSendTime(message.getSendTime());
         messageDto.setId(message.getId());

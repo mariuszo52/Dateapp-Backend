@@ -1,13 +1,13 @@
 package com.dateapp.dateapp.user;
 
 import com.dateapp.dateapp.chat.Chat;
-import com.dateapp.dateapp.config.webSocket.connectionTicket.Ticket;
 import com.dateapp.dateapp.match.Match;
 import com.dateapp.dateapp.swipedProfile.SwipedProfile;
 import com.dateapp.dateapp.userInfo.UserInfo;
 import com.dateapp.dateapp.userRole.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -26,6 +26,7 @@ import java.util.*;
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
+    @Min(1)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull

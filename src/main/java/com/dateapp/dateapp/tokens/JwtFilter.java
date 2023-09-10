@@ -9,6 +9,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,12 +24,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
+    protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
         return notFilteredPaths(request);
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("authorization");
         boolean isOptionsMethod = request.getMethod().equals(HttpMethod.OPTIONS.name());
         if (isOptionsMethod) {
@@ -40,7 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 Jws<Claims> claimsJws = parseToken(authHeader);
                 UsernamePasswordAuthenticationToken authenticationByToken = getAuthenticationByToken(claimsJws);
                 SecurityContextHolder.getContext().setAuthentication(authenticationByToken);
-            }catch (JwtException e){
+            } catch (JwtException e) {
                 System.out.println(e.getMessage());
                 response.setStatus(HttpStatus.FORBIDDEN.value());
             }

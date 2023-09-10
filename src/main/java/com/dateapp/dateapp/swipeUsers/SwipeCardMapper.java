@@ -7,7 +7,7 @@ import java.time.temporal.ChronoUnit;
 
 class SwipeCardMapper {
 
-    public static SwipeCardDto map(User user){
+    public static SwipeCardDto map(User user) {
         SwipeCardDto swipeCardDto = new SwipeCardDto();
         swipeCardDto.setUserId(user.getId());
         swipeCardDto.setFirstName(user.getUserInfo().getFirstName());

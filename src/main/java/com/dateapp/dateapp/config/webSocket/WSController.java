@@ -57,6 +57,7 @@ public class WSController {
         }
 
     }
+
     @MessageMapping("/chat")
     public MessageDto getMessage(MessageDto message) {
         return message;

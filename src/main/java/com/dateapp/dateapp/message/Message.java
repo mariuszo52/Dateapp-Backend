@@ -3,6 +3,7 @@ package com.dateapp.dateapp.message;
 import com.dateapp.dateapp.chat.Chat;
 import com.dateapp.dateapp.user.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Message {
     @Id
+    @Min(1)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull

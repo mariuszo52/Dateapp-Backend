@@ -1,20 +1,17 @@
 package com.dateapp.dateapp.chat;
 
-import com.dateapp.dateapp.config.security.LoggedUserService;
-import com.dateapp.dateapp.exceptions.UnauthorizedResourceAccessException;
 import com.dateapp.dateapp.exceptions.chat.ChatNotFoundException;
 import com.dateapp.dateapp.exceptions.user.UserNotFoundException;
 import com.dateapp.dateapp.match.MatchDto;
 import com.dateapp.dateapp.user.User;
 import com.dateapp.dateapp.user.UserRepository;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
-
-import static com.dateapp.dateapp.config.security.LoggedUserService.getLoggedUserId;
 
 
 @Service
@@ -49,7 +46,8 @@ public class ChatService {
                         new TreeSet<>(Comparator.comparing(ChatDto::getLastMessageTime)
                                 .thenComparingLong(ChatDto::getId).reversed())));
     }
-    public ChatDto findChatById(long id){
+
+    public ChatDto findChatById(long id) {
         Chat chat = chatRepository.findById(id).orElseThrow(ChatNotFoundException::new);
         return chatMapper.map(chat);
     }

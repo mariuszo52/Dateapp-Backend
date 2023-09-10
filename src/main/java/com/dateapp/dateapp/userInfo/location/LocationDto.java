@@ -10,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LocationDto {
+    @Min(1)
     private Long id;
     @NotNull
     @NotBlank

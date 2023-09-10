@@ -3,6 +3,7 @@ package com.dateapp.dateapp.userInfo.location;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -17,6 +18,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 public class Location {
     @Id
+    @Min(1)
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
     @NotNull

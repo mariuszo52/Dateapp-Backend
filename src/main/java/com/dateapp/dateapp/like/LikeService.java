@@ -1,14 +1,13 @@
 package com.dateapp.dateapp.like;
 
-import com.dateapp.dateapp.swipedProfile.*;
-import com.dateapp.dateapp.user.UserRepository;
+import com.dateapp.dateapp.swipedProfile.SwipedProfile;
+import com.dateapp.dateapp.swipedProfile.SwipedProfileRepository;
 import com.dateapp.dateapp.userInfo.UserInfoDto;
 import com.dateapp.dateapp.userInfo.UserInfoMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.dateapp.dateapp.swipedProfile.SwipedProfileService.RIGHT_SWIPE;

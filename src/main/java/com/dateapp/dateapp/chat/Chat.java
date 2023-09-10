@@ -4,7 +4,7 @@ import com.dateapp.dateapp.match.Match;
 import com.dateapp.dateapp.message.Message;
 import com.dateapp.dateapp.user.User;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +20,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Chat {
     @Id
+    @Min(1)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToMany

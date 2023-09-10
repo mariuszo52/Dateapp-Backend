@@ -3,15 +3,13 @@ package com.dateapp.dateapp.userInfo;
 import com.dateapp.dateapp.userInfo.location.LocationDto;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 @Getter
 @Setter
 public class UserInfoDto {
+    @Min(1)
     private long id;
     @NotNull
     @Size(min = 1)

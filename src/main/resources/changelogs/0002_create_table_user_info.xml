@@ -12,7 +12,7 @@
             <column name="first_name" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="date_of_birth" type="DATE" >
+            <column name="date_of_birth" type="DATE">
                 <constraints nullable="false"/>
             </column>
             <column name="gender_identity" type="VARCHAR(50)">

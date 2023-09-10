@@ -1,6 +1,5 @@
 package com.dateapp.dateapp;
 
-import io.jsonwebtoken.JwtException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
@@ -16,12 +15,13 @@ import java.util.stream.Collectors;
 public class DateApplication {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    Map<String, String> handeMethodArgumentNotValidException(MethodArgumentNotValidException ex){
+    Map<String, String> handeMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         return ex.getBindingResult().getFieldErrors()
                 .stream()
                 .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
 
     }
+
     public static void main(String[] args) {
         SpringApplication.run(DateApplication.class, args);
     }

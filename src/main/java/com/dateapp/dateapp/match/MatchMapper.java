@@ -19,21 +19,22 @@ public class MatchMapper {
         this.chatRepository = chatRepository;
     }
 
-    public Match map(MatchDto matchDto){
+    public Match map(MatchDto matchDto) {
         Match match = new Match();
         match.setIsMatched(matchDto.getIsMatched());
         User user = userRepository.findById(matchDto.getUserId()).orElseThrow(UserNotFoundException::new);
         match.setUser(user);
         User matchedUser = userRepository.findById(matchDto.getMatchedUserId()).orElseThrow(UserNotFoundException::new);
         match.setMatchedUser(matchedUser);
-        if(matchDto.getChatId() != null) {
+        if (matchDto.getChatId() != null) {
             Chat chat = chatRepository.findById(matchDto.getChatId()).orElseThrow();
             match.setChat(chat);
         }
         match.setMatchDate(LocalDate.now());
         return match;
     }
-    public MatchDto map(Match match){
+
+    public MatchDto map(Match match) {
         MatchDto matchDto = new MatchDto();
         matchDto.setIsMatched(match.getIsMatched());
         matchDto.setUserId(match.getUser().getId());
