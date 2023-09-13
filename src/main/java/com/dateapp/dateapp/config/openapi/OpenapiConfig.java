@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 @SecurityScheme(
         type = SecuritySchemeType.HTTP,
         name = "JWTSecurity",
-        description = "Register new user and login to get authentication token in response",
+        description = "Register new user and login to get authentication token in response. (Jwt endpoint /login index 0 of response table.)",
         scheme = "bearer",
         bearerFormat = "JWT",
         in = SecuritySchemeIn.HEADER

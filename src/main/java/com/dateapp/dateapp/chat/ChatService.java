@@ -28,7 +28,7 @@ public class ChatService {
 
     public Chat createChat(MatchDto matchDto) {
         Chat chat = new Chat();
-        User user1 = userRepository.findById(matchDto.getUserId()).orElseThrow();
+        User user1 = userRepository.findById(matchDto.getUserId()).orElseThrow(UserNotFoundException::new);
         User user2 = userRepository.findById(matchDto.getMatchedUserId()).orElseThrow(UserNotFoundException::new);
         List<User> participants = new ArrayList<>();
         participants.add(user1);

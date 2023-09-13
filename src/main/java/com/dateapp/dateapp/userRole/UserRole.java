@@ -25,4 +25,8 @@ public class UserRole {
     @Size(min = 5)
     private String name;
 
+    public UserRole(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

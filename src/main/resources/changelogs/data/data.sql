@@ -45,7 +45,7 @@ values ('example4@onet.pl', '{bcrypt}$2a$12$chxm2i8.g1fky70RnMqGHeBAXxHV/02dXyqg
 INSERT INTO user_info
 (first_name, date_of_birth, location_id, gender_identity, gender_interest, url, about, max_distance)
 VALUES ('Stanisław', '1990-08-15', 1, 'man', 'woman', 'https://static.wirtualnemedia.pl/media/top/MaxKolonko655.png',
-        'I like to running', 50.0);
+        'I like running', 50.0);
 insert into users
     (email, password, user_role_id, user_info_id)
 values ('example5@onet.pl', '{bcrypt}$2a$12$chxm2i8.g1fky70RnMqGHeBAXxHV/02dXyqg.TipoKiO5v/HTvYk.', 1, 5);

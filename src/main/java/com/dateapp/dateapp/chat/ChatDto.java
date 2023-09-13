@@ -3,6 +3,7 @@ package com.dateapp.dateapp.chat;
 import com.dateapp.dateapp.match.MatchDto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class ChatDto {
     @Min(1)
     private Long id;
