@@ -14,7 +14,7 @@ public class ChatUserService {
     }
 
     public ChatUser getChatUserEntityByUserIdAndChatId(long userId, long chatId) {
-        return chatUserRepository.findByChat_IdAndUserId(chatId, userId).orElseThrow();
+        return chatUserRepository.findByChat_IdAndUserId(chatId, userId).orElseThrow(RuntimeException::new);
     }
 
     @Transactional
@@ -23,7 +23,8 @@ public class ChatUserService {
     }
 
     public long getUserChatNotificationCounter(long userId, long chatId) {
-        return chatUserRepository.findByChat_IdAndUserId(chatId, userId).orElseThrow().getNotifications();
+        return chatUserRepository.findByChat_IdAndUserId(chatId, userId).orElseThrow(RuntimeException::new)
+                .getNotifications();
     }
 
     public long checkUserUnreadChats(long userId) {

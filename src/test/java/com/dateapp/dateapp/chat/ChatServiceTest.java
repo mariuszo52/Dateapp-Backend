@@ -2,11 +2,10 @@ package com.dateapp.dateapp.chat;
 
 import com.dateapp.dateapp.exceptions.chat.ChatNotFoundException;
 import com.dateapp.dateapp.exceptions.user.UserNotFoundException;
-import com.dateapp.dateapp.match.Match;
 import com.dateapp.dateapp.match.MatchDto;
 import com.dateapp.dateapp.user.User;
 import com.dateapp.dateapp.user.UserRepository;
-import org.hibernate.mapping.Collection;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,9 @@ import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -28,16 +29,21 @@ class ChatServiceTest {
 @Mock ChatRepository chatRepository;
 @Mock ChatMapper chatMapper;
 private ChatService chatService;
+private AutoCloseable autoCloseable;
 private User user1;
 private User user2;
     @BeforeEach
     void setUp(){
-        MockitoAnnotations.openMocks(this);
+        autoCloseable = MockitoAnnotations.openMocks(this);
         chatService = new ChatService(chatRepository, userRepository, chatMapper);
         user1 = new User();
         user1.setId(1L);
         user2 = new User();
         user2.setId(2L);
+    }
+    @AfterEach
+    void close() throws Exception {
+        autoCloseable.close();
     }
 
     @Test
