@@ -9,7 +9,6 @@ import org.hibernate.validator.constraints.URL;
 @Getter
 @Setter
 public class UserInfoDto {
-    @Min(1)
     private long id;
     @NotNull
     @Size(min = 1)

@@ -20,7 +20,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class UserInfo {
     @Id
-    @Min(1)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
